@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="coverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="60%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="80%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1e3a8a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#coverGrad)"/>
+  <rect width="1200" height="600" fill="url(#glow)"/>
+  
+  <!-- Subtle Medical Crosses & Grid Shapes -->
+  <g opacity="0.15" fill="#ffffff">
+    <path d="M 150 100 h 20 v -20 h 20 v 20 h 20 v 20 h -20 v 20 h -20 v -20 h -20 z" />
+    <path d="M 850 120 h 30 v -30 h 30 v 30 h 30 v 30 h -30 v 30 h -30 v -30 h -30 z" />
+    <path d="M 980 380 h 25 v -25 h 25 v 25 h 25 v 25 h -25 v 25 h -25 v -25 h -25 z" />
+    <path d="M 220 440 h 20 v -20 h 20 v 20 h 20 v 20 h -20 v 20 h -20 v -20 h -20 z" />
+  </g>
+
+  <!-- ECG Heartbeat Line -->
+  <path d="M 0 420 L 300 420 L 330 380 L 360 460 L 390 320 L 420 450 L 450 400 L 480 420 L 1200 420" 
+        fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.4"/>
+
+  <!-- Modern Hospital Room Illustration Silhouette -->
+  <g transform="translate(680, 140)">
+    <!-- Desk / Screen / Doctor & Patient silhouettes in modern clean vector -->
+    <rect x="80" y="240" width="340" height="15" rx="5" fill="#60a5fa" opacity="0.5"/>
+    <rect x="130" y="160" width="120" height="80" rx="8" fill="#ffffff" opacity="0.85"/>
+    <rect x="140" y="170" width="100" height="60" rx="4" fill="#0284c7" opacity="0.6"/>
+    <!-- ECG curve on monitor -->
+    <path d="M 145 200 L 165 200 L 175 185 L 185 215 L 195 190 L 205 205 L 235 200" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    
+    <!-- Doctor Shape -->
+    <circle cx="90" cy="140" r="30" fill="#ffffff" opacity="0.9"/>
+    <path d="M 50 250 C 50 190 70 180 90 180 C 110 180 130 190 130 250 Z" fill="#ffffff" opacity="0.9"/>
+    <path d="M 75 185 C 75 220 85 230 90 230 C 95 230 105 220 105 185" fill="none" stroke="#2563eb" stroke-width="4"/>
+
+    <!-- Patient / Child & Parent Shapes -->
+    <circle cx="340" cy="150" r="28" fill="#bae6fd" opacity="0.9"/>
+    <path d="M 300 250 C 300 200 320 190 340 190 C 360 190 380 200 380 250 Z" fill="#bae6fd" opacity="0.9"/>
+    
+    <circle cx="280" cy="190" r="20" fill="#fed7aa" opacity="0.9"/>
+    <path d="M 255 250 C 255 220 270 215 280 215 C 290 215 305 220 305 250 Z" fill="#fed7aa" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,403 @@
+[
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88710",
+    "nik": "3671045403680002",
+    "nama": "Sari Handayani",
+    "tgl_lahir": "1968-03-14",
+    "telepon": "081233445566",
+    "jenis_kelamin": "P",
+    "raw": {
+      "departemen": "Poli Jantung",
+      "dokter": "dr. Adrian Sp.JP",
+      "diagnosis": "Hipertensi Grade II & Pasca PCI",
+      "gol_darah": "B+",
+      "alamat": "Puri Indah Blok A No. 12, Jakarta Barat"
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2291",
+    "nik": "3671045403680002",
+    "nama": "Sari Handayani",
+    "tgl_lahir": "1968-03-14",
+    "telepon": "081233445566",
+    "jenis_kelamin": "P",
+    "raw": {
+      "catatan_dokter": "Evaluasi pasca pemasangan stent 3 bulan lalu. Lanjutkan terapi statin dan antiplatelet.",
+      "resep_aktif": ["Amlodipine 10mg", "Clopidogrel 75mg", "Atorvastatin 20mg"],
+      "tekanan_darah_terakhir": "135/85 mmHg"
+    }
+  },
+  {
+    "sistem": "LOYALITAS",
+    "local_id": "MC-7734",
+    "nik": null,
+    "nama": "Sari Handayani",
+    "tgl_lahir": "1968-03-14",
+    "telepon": "081233445566",
+    "jenis_kelamin": "P",
+    "raw": {
+      "tier": "Mandaya Royal Gold",
+      "poin_kepatuhan": 450,
+      "program": "Care+ Jantung Sehat"
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5120",
+    "nik": null,
+    "nama": "Sari Handayani",
+    "tgl_lahir": "1968-03-14",
+    "telepon": "081233445566",
+    "jenis_kelamin": "P",
+    "raw": {
+      "kanal_kontak": "WhatsApp",
+      "perlu_kontrol": true,
+      "jadwal_kontrol_berikut": "2026-09-10",
+      "kota": "Jakarta Barat"
+    }
+  },
+  {
+    "sistem": "FEEDBACK",
+    "local_id": "FB-903",
+    "nik": null,
+    "nama": "S. Handayani",
+    "tgl_lahir": "1968-03-14",
+    "telepon": null,
+    "jenis_kelamin": "P",
+    "raw": {
+      "skor_nps": 9,
+      "komentar": "Pelayanan rawat inap sangat ramah dan kamar sangat nyaman."
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88711",
+    "nik": "3175021208750001",
+    "nama": "Bambang Pratama",
+    "tgl_lahir": "1975-08-12",
+    "telepon": "081188223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "departemen": "Poli Ortopedi",
+      "dokter": "dr. Erwin Sp.OT",
+      "diagnosis": "Osteoarthritis Genu Sinistra",
+      "gol_darah": "O+"
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2292",
+    "nik": "3175021208750001",
+    "nama": "Bambang Pratama",
+    "tgl_lahir": "1975-08-12",
+    "telepon": "081188223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "rencana": "Injeksi intra-artikular asam hialuronat",
+      "skor_nyeri_baseline": 6
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5121",
+    "nik": null,
+    "nama": "Bambang Pratama",
+    "tgl_lahir": "1975-08-12",
+    "telepon": "081188223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "perlu_kontrol": true,
+      "jadwal_kontrol_berikut": "2026-09-05",
+      "kota": "Tangerang"
+    }
+  },
+  {
+    "sistem": "LOYALITAS",
+    "local_id": "MC-7735",
+    "nik": null,
+    "nama": "Bambang Pratama",
+    "tgl_lahir": "1975-08-12",
+    "telepon": "081188223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "tier": "Mandaya Silver",
+      "poin_kepatuhan": 210
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88712",
+    "nik": "3201011205580003",
+    "nama": "Ahmad Fauzi",
+    "tgl_lahir": "1958-05-12",
+    "telepon": "081311223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "departemen": "Poli Geriatri & Penyakit Dalam",
+      "dokter": "dr. Kartika Sp.PD-KGer",
+      "diagnosis": "Diabetes Melitus Tipe 2 + Dislipidemia",
+      "usia": 68
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2293",
+    "nik": "3201011205580003",
+    "nama": "Ahmad Fauzi",
+    "tgl_lahir": "1958-05-12",
+    "telepon": "081311223344",
+    "jenis_kelamin": "L",
+    "raw": {
+      "resep_aktif": ["Metformin 500mg 3x1", "Glimepiride 2mg 1x1"],
+      "hba1c_terakhir": "7.8%"
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88713",
+    "nik": "3173052011940005",
+    "nama": "Ahmad Fauzi",
+    "tgl_lahir": "1994-11-20",
+    "telepon": "085677889900",
+    "jenis_kelamin": "L",
+    "raw": {
+      "departemen": "Poli Bedah Digestif",
+      "dokter": "dr. Herman Sp.B",
+      "diagnosis": "Apendisitis Akut Pasca Laparoskopi",
+      "usia": 31
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5122",
+    "nik": null,
+    "nama": "Ahmad Fauzi",
+    "tgl_lahir": "1994-11-20",
+    "telepon": "085677889900",
+    "jenis_kelamin": "L",
+    "raw": {
+      "perlu_kontrol": false,
+      "jadwal_kontrol_berikut": "2026-09-18",
+      "kota": "Jakarta Selatan"
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88714",
+    "nik": "3174066504850007",
+    "nama": "Dewi Lestari",
+    "tgl_lahir": "1985-04-25",
+    "telepon": "081288990011",
+    "jenis_kelamin": "P",
+    "raw": {
+      "departemen": "Poli Onkologi",
+      "dokter": "dr. Maya Sp.B(K)Onk",
+      "diagnosis": "Karsinoma Mammae Stadium 1 (Pasca Kemoterapi Siklus 3)"
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2294",
+    "nik": "3174066504850007",
+    "nama": "Dewi Lestari",
+    "tgl_lahir": "1985-04-25",
+    "telepon": "081288990011",
+    "jenis_kelamin": "P",
+    "raw": {
+      "kondisi": "Hemoglobin stabil, mual ringan",
+      "resep_aktif": ["Ondansetron 8mg", "Asam Folat 1mg"]
+    }
+  },
+  {
+    "sistem": "FEEDBACK",
+    "local_id": "FB-904",
+    "nik": null,
+    "nama": "Dewi Lestari",
+    "tgl_lahir": "1985-04-25",
+    "telepon": "081288990011",
+    "jenis_kelamin": "P",
+    "raw": {
+      "skor_nps": 10,
+      "komentar": "Dokter Maya sangat jelas memberi edukasi protokol terapi."
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88715",
+    "nik": "3275031506780004",
+    "nama": "Budi Santoso",
+    "tgl_lahir": "1978-06-15",
+    "telepon": "081399887766",
+    "jenis_kelamin": "L",
+    "raw": {
+      "departemen": "Poli Pulmonologi",
+      "dokter": "dr. Farhan Sp.P",
+      "diagnosis": "Asma Bronkial Eksaserbasi Akut"
+    }
+  },
+  {
+    "sistem": "LOYALITAS",
+    "local_id": "MC-7736",
+    "nik": null,
+    "nama": "Budi Santoso",
+    "tgl_lahir": "1978-06-15",
+    "telepon": "081399887766",
+    "jenis_kelamin": "L",
+    "raw": {
+      "tier": "Mandaya Bronze",
+      "poin_kepatuhan": 120
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5123",
+    "nik": null,
+    "nama": "Budi Santoso",
+    "tgl_lahir": "1978-06-15",
+    "telepon": "081399887766",
+    "jenis_kelamin": "L",
+    "raw": {
+      "perlu_kontrol": true,
+      "jadwal_kontrol_berikut": "2026-09-12",
+      "kota": "Bekasi"
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88716",
+    "nik": "3171015010900002",
+    "nama": "Ratna Kusuma",
+    "tgl_lahir": "1990-10-10",
+    "telepon": "081544332211",
+    "jenis_kelamin": "P",
+    "raw": {
+      "departemen": "Poli Kebidanan & Kandungan",
+      "dokter": "dr. Nurul Sp.OG",
+      "diagnosis": "Gravida 28 Minggu (ANC Rutin)"
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2295",
+    "nik": "3171015010900002",
+    "nama": "Ratna Kusuma",
+    "tgl_lahir": "1990-10-10",
+    "telepon": "081544332211",
+    "jenis_kelamin": "P",
+    "raw": {
+      "suplemen": ["Kalsium 500mg", "Tablet Tambah Darah"],
+      "berat_janin_est": "1150 gram"
+    }
+  },
+  {
+    "sistem": "LOYALITAS",
+    "local_id": "MC-7738",
+    "nik": null,
+    "nama": "Ratna Kusuma",
+    "tgl_lahir": "1990-10-10",
+    "telepon": "081544332211",
+    "jenis_kelamin": "P",
+    "raw": {
+      "tier": "Mandaya Mom&Baby Care",
+      "poin_kepatuhan": 300
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88717",
+    "nik": "3674020309620008",
+    "nama": "Hendro Wijaya",
+    "tgl_lahir": "1962-09-03",
+    "telepon": "081766554433",
+    "jenis_kelamin": "L",
+    "raw": {
+      "departemen": "Poli Neurologi",
+      "dokter": "dr. Richard Sp.S",
+      "diagnosis": "Pasca Ischemic Stroke Subakut",
+      "usia": 64
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5124",
+    "nik": null,
+    "nama": "Hendro Wijaya",
+    "tgl_lahir": "1962-09-03",
+    "telepon": "081766554433",
+    "jenis_kelamin": "L",
+    "raw": {
+      "program_homecare": "Fisioterapi Mandaya Care 2x Seminggu",
+      "kota": "Tangerang Selatan"
+    }
+  },
+  {
+    "sistem": "LOYALITAS",
+    "local_id": "MC-7737",
+    "nik": null,
+    "nama": "Hendro Wijaya",
+    "tgl_lahir": "1962-09-03",
+    "telepon": "081766554433",
+    "jenis_kelamin": "L",
+    "raw": {
+      "tier": "Mandaya Royal Platinum",
+      "poin_kepatuhan": 580
+    }
+  },
+  {
+    "sistem": "HIS",
+    "local_id": "RM-88718",
+    "nik": "3172034209830006",
+    "nama": "Siti Rahmawati",
+    "tgl_lahir": "1983-09-02",
+    "telepon": "081277665544",
+    "jenis_kelamin": "P",
+    "raw": {
+      "departemen": "Poli Mata",
+      "dokter": "dr. Linda Sp.M",
+      "diagnosis": "Retinopati Diabetik Non-Proliferatif"
+    }
+  },
+  {
+    "sistem": "CARE_DOKTER",
+    "local_id": "U-2296",
+    "nik": "3172034209830006",
+    "nama": "Siti Rahmawati",
+    "tgl_lahir": "1983-09-02",
+    "telepon": "081277665544",
+    "jenis_kelamin": "P",
+    "raw": {
+      "rencana": "Fotokoagulasi Laser Retina",
+      "visus_od": "6/18",
+      "visus_os": "6/12"
+    }
+  },
+  {
+    "sistem": "CRM",
+    "local_id": "HS-5125",
+    "nik": null,
+    "nama": "Siti Rahmawati",
+    "tgl_lahir": "1983-09-02",
+    "telepon": "081277665544",
+    "jenis_kelamin": "P",
+    "raw": {
+      "perlu_kontrol": true,
+      "jadwal_kontrol_berikut": "2026-09-08",
+      "kota": "Jakarta Barat"
+    }
+  },
+  {
+    "sistem": "FEEDBACK",
+    "local_id": "FB-905",
+    "nik": null,
+    "nama": "Siti Rahmawati",
+    "tgl_lahir": "1983-09-02",
+    "telepon": null,
+    "jenis_kelamin": "P",
+    "raw": {
+      "skor_nps": 8,
+      "komentar": "Waktu tunggu farmasi mohon dipercepat."
+    }
+  }
+]

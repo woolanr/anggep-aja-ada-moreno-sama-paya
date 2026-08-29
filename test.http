@@ -1,0 +1,157 @@
+### ===================================================================
+### PENGUJIAN OTOMATIS: "Satu Pasien, Satu Riwayat"
+### Mandaya Royal Hospital Puri - 7 Kriteria Uji Terima
+### ===================================================================
+
+@baseUrl = http://localhost:3000
+
+### -------------------------------------------------------------------
+### 0. RESET DATABASE KE KONDISI AWAL DEMO
+### -------------------------------------------------------------------
+POST {{baseUrl}}/api/demo/reset
+Content-Type: application/json
+
+### -------------------------------------------------------------------
+### 1. UJI TERIMA 1: RESOLUSI MPI (30 BARIS MENJADI 9 PASIEN MPI)
+### -------------------------------------------------------------------
+POST {{baseUrl}}/api/mpi/resolve
+Content-Type: application/json
+
+### LIHAT HASIL PASIEN MPI
+GET {{baseUrl}}/api/mpi/patients
+
+### -------------------------------------------------------------------
+### 2. UJI TERIMA 2: MINIMAL 1 KASUS MASUK ANTREAN TINJAUAN (0.70 - 0.92)
+### -------------------------------------------------------------------
+GET {{baseUrl}}/api/mpi/review
+
+### KEPUTUSAN TINJAUAN MANUAL (SETUJU GABUNG)
+POST {{baseUrl}}/api/mpi/review/1
+Content-Type: application/json
+
+{
+  "keputusan": "setuju",
+  "petugas": "dr. Adrian Sp.JP"
+}
+
+### -------------------------------------------------------------------
+### 3. UJI TERIMA 3: DUA "AHMAD FAUZI" TIDAK BERGABUNG (2 PASIEN BERBEDA)
+### -------------------------------------------------------------------
+GET {{baseUrl}}/api/mpi/patients
+
+### -------------------------------------------------------------------
+### 4. UJI TERIMA 4: MATIKAN CONSENT PEMASARAN -> 403 FORBIDDEN & ACCESS LOG
+### -------------------------------------------------------------------
+# Langkah A: Matikan persetujuan pemasaran untuk MPI-0001
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "pemasaran",
+  "diberikan": 0
+}
+
+# Langkah B: Panggil data pasien dengan peran marketing & purpose pemasaran -> Harap 403
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=pemasaran
+X-Peran: marketing
+X-Aktor: Petugas CRM Marketing
+
+# Langkah C: Periksa apakah percobaan akses tercatat di Access Log
+GET {{baseUrl}}/api/access-log/MPI-0001
+
+### -------------------------------------------------------------------
+### 5. UJI TERIMA 5: MATIKAN SEMUA CONSENT -> PURPOSE=KLINIS TETAP 200 OK
+### -------------------------------------------------------------------
+# Langkah A: Matikan semua consent yang dapat dicabut
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "pengingat",
+  "diberikan": 0
+}
+
+###
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "personalisasi",
+  "diberikan": 0
+}
+
+###
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "analitik",
+  "diberikan": 0
+}
+
+# Langkah B: Akses layanan klinis dengan peran dokter -> Tetap 200 OK (dapat_dicabut = 0)
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=klinis
+X-Peran: dokter
+X-Aktor: dr. Adrian Sp.JP
+
+### -------------------------------------------------------------------
+### 6. UJI TERIMA 6: 1 MPI_ID + 4 PERAN BERBEDA -> 4 PAYLOAD BERBEDA
+### -------------------------------------------------------------------
+# Payload 1: Dokter (Klinis Lengkap)
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=klinis
+X-Peran: dokter
+
+### Payload 2: Perawat (Klinis Asuhan)
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=klinis
+X-Peran: perawat
+
+### Payload 3: Marketing (Non-Klinis Pemasaran) - aktifkan consent dulu jika ingin 200
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "pemasaran",
+  "diberikan": 1
+}
+
+###
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=pemasaran
+X-Peran: marketing
+
+### Payload 4: AI / Analitik (Pseudonim SHA-256 mpi_hash, kelompok usia)
+POST {{baseUrl}}/api/consent/MPI-0001
+Content-Type: application/json
+
+{
+  "purpose": "analitik",
+  "diberikan": 1
+}
+
+###
+GET {{baseUrl}}/api/patient/MPI-0001?purpose=analitik
+X-Peran: ai
+
+### -------------------------------------------------------------------
+### 7. UJI TERIMA 7: MAJUKAN HARI SIMULASI 3X -> PASIEN MUNCUL DI RISK QUEUE
+### -------------------------------------------------------------------
+# Hari +1
+POST {{baseUrl}}/api/demo/advance-day
+
+### Hari +2
+POST {{baseUrl}}/api/demo/advance-day
+
+### Hari +3
+POST {{baseUrl}}/api/demo/advance-day
+
+### PERIKSA ANTREAN PASIEN BERISIKO TINGGI DENGAN ALASAN EKSPLISIT
+GET {{baseUrl}}/api/risk/queue
+
+### -------------------------------------------------------------------
+### 8. VERIFIKASI DATA LATIH AI (CLOSED LEARNING LOOP)
+### -------------------------------------------------------------------
+GET {{baseUrl}}/api/training-data
+
+### -------------------------------------------------------------------
+### 9. VERIFIKASI RESOURCE FHIR R4 KANONIKAL
+### -------------------------------------------------------------------
+GET {{baseUrl}}/fhir/Patient/MPI-0001
