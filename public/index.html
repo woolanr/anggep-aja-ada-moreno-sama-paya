@@ -35,6 +35,13 @@
           </button>
           <button
             class="care-nav-btn"
+            id="nav-mira"
+            onclick="switchView('mira')"
+          >
+            🤖 Asisten MIRA
+          </button>
+          <button
+            class="care-nav-btn"
             id="nav-loyalty"
             onclick="switchView('loyalty')"
           >
@@ -212,12 +219,20 @@
             </div>
           </div>
 
-          <!-- Card 2: Check-in Mandiri Gejala & Skala Nyeri -->
+          <!-- Card 2: Asisten Pemulihan MIRA (Recovery Assistant) -->
           <div class="quick-card">
             <div>
               <div class="quick-card-header">
-                <div class="quick-card-title">🌡️ Check-in Gejala & Nyeri</div>
-                <span class="badge-system badge-CRM">Real-time DPJP</span>
+                <div class="quick-card-title">🤖 Asisten Pemulihan MIRA</div>
+                <span
+                  class="badge-system badge-HIS"
+                  style="
+                    background: #e0f2fe;
+                    color: #0369a1;
+                    border-color: #bae6fd;
+                  "
+                  >H+3 Pemulihan</span
+                >
               </div>
               <p
                 style="
@@ -226,8 +241,8 @@
                   margin-bottom: 14px;
                 "
               >
-                Laporkan skala nyeri (0–10) dan gejala yang Anda rasakan untuk
-                pemantauan otomatis tim medis.
+                Sapaan harian & check-in one-tap berbasis protokol klinis DPJP
+                dengan triase otomatis 3-level.
               </p>
               <div
                 style="
@@ -246,26 +261,37 @@
                     margin-bottom: 6px;
                   "
                 >
-                  <span>Skala Nyeri Terakhir:</span>
-                  <strong id="home-last-pain" style="color: var(--primary)"
-                    >2 / 10 (Ringan)</strong
+                  <span>Protokol Klinis:</span>
+                  <strong
+                    style="color: var(--primary)"
+                    id="home-mira-pathway-name"
+                    >Pasca-PCI Stent Jantung</strong
                   >
                 </div>
                 <div
-                  style="font-size: 12px; color: var(--text-muted)"
-                  id="home-last-symptoms"
+                  style="font-size: 12px; color: #0284c7; font-weight: 600"
+                  id="home-mira-phase-prompt"
                 >
-                  Gejala: Nyeri ringan di area luka pasca operasi
+                  💬 "Bagaimana napas & stamina saat jalan santai hari ini?"
                 </div>
               </div>
             </div>
-            <button
-              class="btn btn-primary btn-sm"
-              onclick="openCheckinModal()"
-              style="width: 100%"
-            >
-              📝 Isi Check-in Sekarang
-            </button>
+            <div style="display: flex; gap: 8px">
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="switchView('mira')"
+                style="flex: 1"
+              >
+                🤖 Buka Asisten MIRA
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="openCheckinModal()"
+                title="Isi Check-in Cepat"
+              >
+                📝 Form
+              </button>
+            </div>
           </div>
 
           <!-- Card 3: Jadwal Kontrol Dokter Berikutnya -->
@@ -913,6 +939,691 @@
       </section>
 
       <!-- ====================================================================
+         PAGE VIEW: MIRA (MODUL 2: RECOVERY ASSISTANT / FOLLOW-UP)
+         ==================================================================== -->
+      <section id="view-mira" class="page-view">
+        <!-- MIRA Hero Card -->
+        <div class="mira-hero-card">
+          <div style="position: relative; z-index: 2">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                gap: 16px;
+              "
+            >
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 10px;
+                  "
+                >
+                  <span class="mira-badge-ai"
+                    >🤖 MANDAYA MIRA ENGINE · PROTOKOL DPJP</span
+                  >
+                  <span
+                    class="badge-system"
+                    style="
+                      background: rgba(255, 255, 255, 0.15);
+                      color: #ffffff;
+                      border-color: rgba(255, 255, 255, 0.3);
+                    "
+                    id="mira-hero-status-pill"
+                    >Fase Pemulihan Aktif</span
+                  >
+                </div>
+                <h1
+                  style="
+                    font-size: 26px;
+                    font-weight: 800;
+                    line-height: 1.2;
+                    margin-bottom: 8px;
+                  "
+                >
+                  MIRA (Mandaya Intelligent Recovery Assistant)
+                </h1>
+                <p
+                  style="
+                    font-size: 14px;
+                    color: #bae6fd;
+                    max-width: 680px;
+                    line-height: 1.5;
+                  "
+                >
+                  Pendamping klinis proaktif pasca rawat. Menyapa terjadwal di
+                  tiap fase pemulihan, edukasi & pengingat obat, triase otomatis
+                  3 tingkat, dan jembatan loyalitas CarePoint.
+                </p>
+              </div>
+
+              <!-- Fast Pathway & Day Switcher Simulator (Demo Control) -->
+              <div
+                style="
+                  background: rgba(15, 23, 42, 0.6);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 14px;
+                  padding: 14px 18px;
+                  min-width: 280px;
+                  backdrop-filter: blur(8px);
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: #38bdf8;
+                    text-transform: uppercase;
+                    margin-bottom: 8px;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  ⚙️ Kontrol Simulasi Klinis DPJP
+                </div>
+                <div style="margin-bottom: 10px">
+                  <label
+                    style="
+                      font-size: 11px;
+                      color: #cbd5e1;
+                      display: block;
+                      margin-bottom: 4px;
+                    "
+                    >Pilih Care Pathway Template:</label
+                  >
+                  <select
+                    id="mira-sim-pathway-select"
+                    class="form-select"
+                    style="
+                      font-size: 12px;
+                      padding: 6px 10px;
+                      background: #1e293b;
+                      color: white;
+                      border-color: #475569;
+                    "
+                    onchange="changeMiraPathwaySimulation()"
+                  >
+                    <option value="pasca_pci_jantung">
+                      🫀 Pasca-PCI Stent Jantung (Kardiologi)
+                    </option>
+                    <option value="pasca_op_ortopedi">
+                      🦴 Pasca-Op Total Knee / Ortopedi
+                    </option>
+                    <option value="pasca_kemoterapi">
+                      🎗️ Pasca-Kemoterapi Siklus 1 (Onkologi)
+                    </option>
+                    <option value="pasca_rawat_jantung_kronis">
+                      🩺 Kontrol Rawat Gagal Jantung Kronis
+                    </option>
+                  </select>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <span style="font-size: 11px; color: #cbd5e1"
+                    >Lompat Hari:</span
+                  >
+                  <div style="display: flex; gap: 4px">
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      style="padding: 3px 8px; font-size: 11px"
+                      onclick="setMiraDaySimulation(1)"
+                    >
+                      H+1
+                    </button>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      style="padding: 3px 8px; font-size: 11px"
+                      onclick="setMiraDaySimulation(3)"
+                    >
+                      H+3
+                    </button>
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      style="padding: 3px 8px; font-size: 11px"
+                      onclick="setMiraDaySimulation(7)"
+                    >
+                      H+7
+                    </button>
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      style="padding: 3px 8px; font-size: 11px"
+                      onclick="setMiraDaySimulation(14)"
+                    >
+                      H+14
+                    </button>
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      style="padding: 3px 8px; font-size: 11px"
+                      onclick="setMiraDaySimulation(30)"
+                    >
+                      H+30
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Doctor & Target Kontrol Ribbon -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 20px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+                font-size: 13px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 16px;
+                  flex-wrap: wrap;
+                "
+              >
+                <div>
+                  <span style="color: #94a3b8; font-size: 12px"
+                    >DPJP Penanggung Jawab:</span
+                  >
+                  <div
+                    style="font-weight: 700; color: #ffffff"
+                    id="mira-hero-dpjp"
+                  >
+                    dr. Beny Hartono, Sp.JP(K)
+                  </div>
+                </div>
+                <div>
+                  <span style="color: #94a3b8; font-size: 12px"
+                    >Diagnosis / Prosedur:</span
+                  >
+                  <div
+                    style="font-weight: 700; color: #38bdf8"
+                    id="mira-hero-diagnosis"
+                  >
+                    Pemasangan DES Stent Arteri Koroner
+                  </div>
+                </div>
+                <div>
+                  <span style="color: #94a3b8; font-size: 12px"
+                    >Fase Saat Ini:</span
+                  >
+                  <div
+                    style="font-weight: 700; color: #4ade80"
+                    id="mira-hero-current-phase"
+                  >
+                    Hari ke-3 (H+3)
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span style="color: #94a3b8; font-size: 12px"
+                  >Reward Check-in Selesai:</span
+                >
+                <span
+                  class="badge-system"
+                  style="
+                    background: #fef08a;
+                    color: #854d0e;
+                    font-weight: 800;
+                    border-color: #fde047;
+                  "
+                  >🪙 +150 CarePoints</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stepper Fase Pemulihan Pathway (H+1 / H+3 / H+7 / H+14 / H+30) -->
+        <div
+          style="
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 12px;
+            "
+          >
+            <div>
+              <h3
+                style="
+                  font-size: 16px;
+                  font-weight: 800;
+                  color: var(--text-main);
+                "
+              >
+                Jalur Pemulihan Terjadwal (Care Pathway Stepper)
+              </h3>
+              <p style="font-size: 12.5px; color: var(--text-muted)">
+                Titik sentuh klinis otomatis yang dirancang oleh komite medis &
+                DPJP spesialis.
+              </p>
+            </div>
+            <span
+              style="font-size: 12px; font-weight: 700; color: var(--primary)"
+              id="mira-progress-text"
+              >Progres Pemulihan: 40%</span
+            >
+          </div>
+
+          <div class="pathway-stepper" id="mira-pathway-stepper">
+            <!-- Stepper steps rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Main Grid: Interactive MIRA Proactive Chat Room & Clinical Reference -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+          "
+        >
+          <!-- Left Column: Interactive Proactive Chat Room -->
+          <div class="mira-chat-container">
+            <div class="mira-chat-header">
+              <div style="display: flex; align-items: center; gap: 12px">
+                <div class="mira-avatar-circle">🤖</div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 6px">
+                    <strong style="font-size: 15px; color: var(--text-main)"
+                      >MIRA Recovery Assistant</strong
+                    >
+                    <span
+                      style="
+                        font-size: 11px;
+                        background: #dcfce7;
+                        color: #15803d;
+                        padding: 2px 6px;
+                        border-radius: 10px;
+                        font-weight: 700;
+                      "
+                      >● Online</span
+                    >
+                  </div>
+                  <div
+                    style="font-size: 11.5px; color: var(--text-muted)"
+                    id="mira-chat-subtitle"
+                  >
+                    Bekerja di bawah supervisi dr. Beny Hartono, Sp.JP(K)
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 6px">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="loadMiraPathway()"
+                  title="Muat Ulang Percakapan"
+                >
+                  🔄 Refresh
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Message Thread (Proactive Messaging) -->
+            <div class="mira-chat-messages" id="mira-chat-messages">
+              <!-- Rendered dynamically by renderMiraChat() -->
+            </div>
+
+            <!-- Interactive One-Tap Response Panel (3 Options) -->
+            <div class="mira-one-tap-panel" id="mira-one-tap-panel">
+              <div
+                style="
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: var(--text-main);
+                  margin-bottom: 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>👆 Pilih Satu Respons Cepat (One-Tap):</span>
+                <span
+                  style="font-size: 11.5px; color: #0284c7; font-weight: 600"
+                  >Otomatis Ditriase AI</span
+                >
+              </div>
+
+              <div class="mira-one-tap-grid">
+                <!-- Option 1: Membaik (Green) -->
+                <div
+                  class="one-tap-card option-green"
+                  id="card-opt-membaik"
+                  onclick="selectOneTapOption('membaik')"
+                >
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <strong style="color: #15803d; font-size: 14px"
+                        >🟢 Membaik / Nyaman</strong
+                      >
+                      <span
+                        style="
+                          font-size: 11px;
+                          font-weight: 700;
+                          color: #166534;
+                          background: #dcfce7;
+                          padding: 2px 6px;
+                          border-radius: 6px;
+                        "
+                        >+150 Poin</span
+                      >
+                    </div>
+                    <p
+                      style="
+                        font-size: 12px;
+                        color: #166534;
+                        line-height: 1.4;
+                        margin: 0;
+                      "
+                    >
+                      Kondisi stabil, tidak ada keluhan berarti, obat diminum
+                      teratur.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Option 2: Masih Gejala (Yellow) -->
+                <div
+                  class="one-tap-card option-yellow"
+                  id="card-opt-gejala"
+                  onclick="selectOneTapOption('masih_gejala')"
+                >
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <strong style="color: #854d0e; font-size: 14px"
+                        >🟡 Masih Gejala Ringan</strong
+                      >
+                      <span
+                        style="
+                          font-size: 11px;
+                          font-weight: 700;
+                          color: #854d0e;
+                          background: #fef9c3;
+                          padding: 2px 6px;
+                          border-radius: 6px;
+                        "
+                        >Edukasi & Pantau</span
+                      >
+                    </div>
+                    <p
+                      style="
+                        font-size: 12px;
+                        color: #713f12;
+                        line-height: 1.4;
+                        margin: 0;
+                      "
+                    >
+                      Ada rasa tidak nyaman wajar fase pemulihan, butuh saran
+                      perawat.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Option 3: Butuh Bantuan (Red) -->
+                <div
+                  class="one-tap-card option-red"
+                  id="card-opt-bantuan"
+                  onclick="selectOneTapOption('butuh_bantuan')"
+                >
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 4px;
+                      "
+                    >
+                      <strong style="color: #991b1b; font-size: 14px"
+                        >🔴 Butuh Bantuan Segera</strong
+                      >
+                      <span
+                        style="
+                          font-size: 11px;
+                          font-weight: 700;
+                          color: #991b1b;
+                          background: #fee2e2;
+                          padding: 2px 6px;
+                          border-radius: 6px;
+                        "
+                        >Prioritas Tinggi</span
+                      >
+                    </div>
+                    <p
+                      style="
+                        font-size: 12px;
+                        color: #7f1d1d;
+                        line-height: 1.4;
+                        margin: 0;
+                      "
+                    >
+                      Mengalami gejala red flags, nyeri bertambah, atau sesak
+                      napas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Optional Patient Specific Notes -->
+              <div style="margin-bottom: 12px">
+                <input
+                  type="text"
+                  id="mira-checkin-notes"
+                  class="form-input"
+                  placeholder="Tulis catatan atau keluhan spesifik Anda jika ada (opsional)..."
+                  style="font-size: 13px"
+                />
+              </div>
+
+              <button
+                class="btn btn-primary"
+                id="btn-submit-mira-checkin"
+                onclick="submitMiraCheckin()"
+                style="width: 100%; justify-content: center; padding: 12px"
+              >
+                🚀 Kirim Jawaban Check-in & Jalankan Triase
+              </button>
+            </div>
+
+            <!-- Dynamic Triase Outcome Card (Post-Checkin) -->
+            <div
+              id="mira-triage-outcome-container"
+              style="padding: 0 20px 20px 20px; display: none"
+            >
+              <!-- Rendered after checkin submission -->
+            </div>
+          </div>
+
+          <!-- Right Column: DPJP Prescribed Medicines & Red Flags Reference -->
+          <div style="display: flex; flex-direction: column; gap: 20px">
+            <!-- Box 1: DPJP Prescribed Medications -->
+            <div
+              style="
+                background: var(--card-bg);
+                border-radius: 18px;
+                border: 1px solid var(--border-color);
+                padding: 22px;
+                box-shadow: var(--shadow-sm);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: 14px;
+                "
+              >
+                <span style="font-size: 20px">💊</span>
+                <div>
+                  <h3
+                    style="
+                      font-size: 15px;
+                      font-weight: 800;
+                      color: var(--text-main);
+                    "
+                  >
+                    Obat Rutin Pemulihan DPJP
+                  </h3>
+                  <span style="font-size: 11.5px; color: var(--text-muted)"
+                    >Sesuai resep discharge summary RS</span
+                  >
+                </div>
+              </div>
+
+              <div
+                id="mira-prescribed-meds-list"
+                style="display: flex; flex-direction: column; gap: 10px"
+              >
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Box 2: Red Flags (Tanda Bahaya Medis) -->
+            <div
+              style="
+                background: #fff1f2;
+                border-radius: 18px;
+                border: 1px solid #fecdd3;
+                padding: 22px;
+                box-shadow: var(--shadow-sm);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: 12px;
+                "
+              >
+                <span style="font-size: 20px">🚨</span>
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 800; color: #9f1239">
+                    Red Flags (Tanda Bahaya Darurat)
+                  </h3>
+                  <span style="font-size: 11.5px; color: #be123c"
+                    >Segera hubungi IGD jika mengalami gejala ini:</span
+                  >
+                </div>
+              </div>
+
+              <ul
+                id="mira-red-flags-list"
+                style="
+                  margin: 0;
+                  padding-left: 18px;
+                  font-size: 12.5px;
+                  color: #881337;
+                  line-height: 1.6;
+                "
+              >
+                <!-- Rendered via JS -->
+              </ul>
+
+              <div
+                style="
+                  margin-top: 14px;
+                  padding-top: 12px;
+                  border-top: 1px solid #fecdd3;
+                "
+              >
+                <a
+                  href="tel:1500111"
+                  class="btn-emergency"
+                  style="width: 100%; justify-content: center"
+                >
+                  🚨 Hotline IGD 24 Jam Mandaya: 1500-111
+                </a>
+              </div>
+            </div>
+
+            <!-- Box 3: Jadwal Kontrol Dokter Mandaya -->
+            <div
+              style="
+                background: var(--card-bg);
+                border-radius: 18px;
+                border: 1px solid var(--border-color);
+                padding: 20px;
+                box-shadow: var(--shadow-sm);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 8px;
+                "
+              >
+                <strong style="font-size: 14px; color: var(--text-main)"
+                  >📅 Jadwal Kontrol Poli</strong
+                >
+                <span class="badge-system badge-HIS">Terkonfirmasi</span>
+              </div>
+              <p
+                style="
+                  font-size: 12.5px;
+                  color: var(--text-muted);
+                  margin-bottom: 10px;
+                "
+                id="mira-kontrol-text"
+              >
+                Poli Kardiologi Mandaya Puri · 5 hari lagi
+              </p>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="switchView('booking')"
+                style="width: 100%"
+              >
+                📅 Kelola / Reschedule Jadwal Kontrol
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
          PAGE VIEW 5: MANDAYA CAREPOINT (MODUL 1: LOYALITAS MEDIS & GAMIFIKASI)
          ==================================================================== -->
       <section id="view-loyalty" class="page-view">
@@ -1487,6 +2198,13 @@
               </button>
               <button
                 class="drawer-tab-btn"
+                id="drawer-tab-mira-nurse"
+                onclick="switchDrawerTab('mira-nurse')"
+              >
+                🤖 Antrean Triase MIRA
+              </button>
+              <button
+                class="drawer-tab-btn"
                 id="drawer-tab-mpi"
                 onclick="switchDrawerTab('mpi')"
               >
@@ -1567,6 +2285,171 @@
             </div>
 
             <div id="staff-risk-queue-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- DRAWER TAB: ANTREAN TRIASE MIRA & CASE MANAGER (MODUL 2) -->
+          <div id="drawer-pane-mira-nurse" style="display: none">
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+              "
+            >
+              <div>
+                <div
+                  style="
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span>🤖</span> Papan Pantau Prioritas Triase Perawat (Nurse
+                  Priority Queue)
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted)">
+                  Hasil penyaringan triase otomatis MIRA. Perawat fokus pada
+                  pasien bertingkat Tinggi & Sedang tanpa panggilan manual satu
+                  per satu.
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="loadNursePriorityQueue()"
+                >
+                  🔄 Muat Ulang Antrean
+                </button>
+              </div>
+            </div>
+
+            <!-- Live KPI Counters -->
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 14px;
+                margin-bottom: 20px;
+              "
+            >
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 14px;
+                  border-left: 4px solid #ef4444;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    font-weight: 700;
+                  "
+                >
+                  🚨 Butuh Intervensi Segera
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #dc2626;
+                    margin-top: 4px;
+                  "
+                  id="nurse-stat-high"
+                >
+                  0 Pasien
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted)">
+                  Tingkat Tinggi (Red Flags)
+                </div>
+              </div>
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 14px;
+                  border-left: 4px solid #f59e0b;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    font-weight: 700;
+                  "
+                >
+                  ⚠️ Pemantauan Moderat
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #d97706;
+                    margin-top: 4px;
+                  "
+                  id="nurse-stat-medium"
+                >
+                  0 Pasien
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted)">
+                  Tingkat Sedang (Saran Edukasi)
+                </div>
+              </div>
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 14px;
+                  border-left: 4px solid #10b981;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    font-weight: 700;
+                  "
+                >
+                  ✅ Otomatis AI / Selesai
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #16a34a;
+                    margin-top: 4px;
+                  "
+                  id="nurse-stat-low"
+                >
+                  0 Pasien
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted)">
+                  Tingkat Rendah / Resolved
+                </div>
+              </div>
+            </div>
+
+            <!-- Queue Table / List Container -->
+            <div id="mira-nurse-queue-container">
               <!-- Rendered via JS -->
             </div>
           </div>

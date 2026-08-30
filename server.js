@@ -37,6 +37,14 @@ import {
   submitHealthQuiz,
   incrementCareStreak,
 } from "./services/loyalty.js";
+import {
+  getPatientActivePathway,
+  setPatientPathwayPhase,
+  submitCheckinResponse,
+  getNursePriorityQueue,
+  updateNurseQueueStatus,
+  CARE_PATHWAY_TEMPLATES,
+} from "./services/mira.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -762,6 +770,136 @@ app.post("/api/loyalty/streak/increment", (req, res) => {
     const { mpiId = "MPI-0001" } = req.body;
     const hasil = incrementCareStreak(mpiId);
     res.json(hasil);
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+// ==========================================
+// 5C. ENDPOINTS MIRA (MODUL 2: RECOVERY ASSISTANT & FOLLOW-UP)
+// ==========================================
+
+/**
+ * GET /api/mira/pathway/:mpiId - Dapatkan Care Pathway aktif pasien, template DPJP, dan jadwal check-in
+ */
+app.get("/api/mira/pathway/:mpiId", (req, res) => {
+  try {
+    const { mpiId } = req.params;
+    const data = getPatientActivePathway(mpiId);
+    res.json({ sukses: true, data });
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/mira/pathway/set-phase - Simulasi ganti template pathway atau lompat hari pemulihan
+ */
+app.post("/api/mira/pathway/set-phase", (req, res) => {
+  try {
+    const {
+      mpiId = "MPI-0001",
+      pathwayId = "pasca_pci_jantung",
+      targetDay = 3,
+    } = req.body;
+    const data = setPatientPathwayPhase(
+      mpiId,
+      pathwayId,
+      parseInt(targetDay, 10),
+    );
+    res.json({
+      sukses: true,
+      pesan: `Pathway & hari pemulihan berhasil diatur ke hari H+${targetDay}`,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/mira/checkin - Submit respons check-in pasien (One-tap response + Triase Engine + Loyalty Bridge)
+ */
+app.post("/api/mira/checkin", (req, res) => {
+  try {
+    const {
+      mpiId = "MPI-0001",
+      pathwayId,
+      phaseId,
+      responseOption,
+      patientNotes = "",
+    } = req.body;
+    if (!pathwayId || !phaseId || !responseOption) {
+      return res
+        .status(400)
+        .json({
+          sukses: false,
+          error:
+            "Field 'pathwayId', 'phaseId', dan 'responseOption' wajib diisi.",
+        });
+    }
+    const hasil = submitCheckinResponse(
+      mpiId,
+      pathwayId,
+      phaseId,
+      responseOption,
+      patientNotes,
+    );
+    res.json(hasil);
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/mira/nurse-queue - Antrean prioritas triase perawat & case manager
+ */
+app.get("/api/mira/nurse-queue", (req, res) => {
+  try {
+    const filterLevel = req.query.level || "all";
+    const filterStatus = req.query.status || "all";
+    const data = getNursePriorityQueue(filterLevel, filterStatus);
+    res.json({ sukses: true, data });
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/mira/nurse-queue/action - Tindakan perawat (tele-nurse call, eskalasi DPJP, disposisi homecare, resolve)
+ */
+app.post("/api/mira/nurse-queue/action", (req, res) => {
+  try {
+    const {
+      queueId,
+      actionType,
+      notes = "",
+      nurseName = "Ns. Ratih Wardani, S.Kep",
+    } = req.body;
+    if (!queueId || !actionType) {
+      return res
+        .status(400)
+        .json({
+          sukses: false,
+          error: "Field 'queueId' dan 'actionType' wajib diisi.",
+        });
+    }
+    const hasil = updateNurseQueueStatus(queueId, actionType, notes, nurseName);
+    res.json(hasil);
+  } catch (err) {
+    res.status(500).json({ sukses: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/mira/templates - Daftar semua Care Pathway Templates
+ */
+app.get("/api/mira/templates", (req, res) => {
+  try {
+    res.json({
+      sukses: true,
+      templates: Object.values(CARE_PATHWAY_TEMPLATES),
+    });
   } catch (err) {
     res.status(500).json({ sukses: false, error: err.message });
   }

@@ -29,6 +29,9 @@ let state = {
   gamificationMissions: [],
   activeQuiz: null,
   lastRedemptionResult: null,
+  miraData: null,
+  selectedOneTapOption: null,
+  miraNurseQueue: [],
   medications: [
     {
       id: 1,
@@ -174,6 +177,8 @@ async function loadInitialData() {
     await loadMpiReviews();
     await loadAccessLogs();
     await loadLoyaltyData();
+    await loadMiraPathway();
+    await loadNursePriorityQueue();
   } catch (err) {
     console.error("Error loading initial data:", err);
   }
@@ -218,6 +223,8 @@ function switchView(viewName) {
     renderChatDoctorsList();
   } else if (viewName === "loyalty") {
     loadLoyaltyData();
+  } else if (viewName === "mira") {
+    loadMiraPathway();
   } else if (viewName === "booking") {
     updateBookingPointQuote();
   }
@@ -234,6 +241,7 @@ function toggleDrawer() {
   }
   if (state.drawerOpen) {
     loadRiskQueue();
+    loadNursePriorityQueue();
     loadMpiReviews();
     renderRoleComparison();
     loadMpiPatientsTable();
@@ -261,6 +269,10 @@ function switchDrawerTab(tabName) {
 
   if (btn) btn.classList.add("active");
   if (pane) pane.style.display = "block";
+
+  if (tabName === "mira-nurse") {
+    loadNursePriorityQueue();
+  }
 }
 
 /**
@@ -1883,4 +1895,581 @@ async function updateBookingPointQuote() {
       }
     }
   } catch (err) {}
+}
+
+// ==========================================================================
+// MODUL 2: MIRA (RECOVERY ASSISTANT & FOLLOW-UP) CLIENT-SIDE ENGINE
+// ==========================================================================
+
+/**
+ * Muat data Care Pathway aktif pasien & fase saat ini
+ */
+async function loadMiraPathway() {
+  const mpiId = state.currentMpiId || "MPI-0001";
+  try {
+    const res = await fetch(`/api/mira/pathway/${mpiId}`).then((r) => r.json());
+    if (res.sukses && res.data) {
+      state.miraData = res.data;
+      renderMiraHero(res.data);
+      renderMiraStepper(res.data);
+      renderMiraChat(res.data);
+      renderMiraMedsAndRedFlags(res.data);
+
+      // Sinkronisasi info ke kartu beranda (Home Card 2)
+      const homePathwayName = document.getElementById("home-mira-pathway-name");
+      const homePhasePrompt = document.getElementById("home-mira-phase-prompt");
+      if (homePathwayName) homePathwayName.textContent = res.data.pathway.name;
+      if (homePhasePrompt && res.data.currentPhase) {
+        homePhasePrompt.textContent = `💬 "${res.data.currentPhase.question}"`;
+      }
+    }
+  } catch (err) {
+    console.error("Error loading MIRA pathway:", err);
+  }
+}
+
+/**
+ * Render Hero Header MIRA
+ */
+function renderMiraHero(data) {
+  const dpjpEl = document.getElementById("mira-hero-dpjp");
+  const diagEl = document.getElementById("mira-hero-diagnosis");
+  const phaseEl = document.getElementById("mira-hero-current-phase");
+  const simSelect = document.getElementById("mira-sim-pathway-select");
+
+  if (dpjpEl)
+    dpjpEl.textContent =
+      data.patientPathway.dpjp_name || "dr. Beny Hartono, Sp.JP(K)";
+  if (diagEl)
+    diagEl.textContent = data.patientPathway.diagnosis || data.pathway.name;
+  if (phaseEl)
+    phaseEl.textContent = `Hari ke-${data.patientPathway.current_day} (H+${data.patientPathway.current_day})`;
+  if (simSelect && data.pathway) simSelect.value = data.pathway.id;
+}
+
+/**
+ * Render Stepper Visual Titik Sentuh Pemulihan (H+1, H+3, H+7, H+14, H+30)
+ */
+function renderMiraStepper(data) {
+  const container = document.getElementById("mira-pathway-stepper");
+  const progressText = document.getElementById("mira-progress-text");
+  if (!container || !data.pathway || !data.pathway.schedule) return;
+
+  const currentDay = data.patientPathway.current_day;
+  const schedule = data.pathway.schedule;
+
+  let completedCount = 0;
+  container.innerHTML = schedule
+    .map((sch, idx) => {
+      const isCompleted =
+        sch.day < currentDay ||
+        (data.pastResponses &&
+          data.pastResponses.some((r) => r.phase_day === sch.day));
+      const isActive = sch.day === data.currentPhase.day;
+      if (isCompleted) completedCount++;
+
+      return `
+      <div class="stepper-step ${isCompleted ? "completed" : isActive ? "active" : ""}" onclick="setMiraDaySimulation(${sch.day})">
+        <div class="stepper-dot">
+          ${isCompleted ? "✓" : `H+${sch.day}`}
+        </div>
+        <div class="stepper-label">${sch.phase}</div>
+      </div>
+    `;
+    })
+    .join("");
+
+  if (progressText) {
+    const percent = Math.round((completedCount / schedule.length) * 100);
+    progressText.textContent = `Progres Pemulihan: ${percent}% Selesai`;
+  }
+}
+
+/**
+ * Render Thread Percakapan Proaktif WhatsApp-Style MIRA
+ */
+function renderMiraChat(data) {
+  const container = document.getElementById("mira-chat-messages");
+  const subtitleEl = document.getElementById("mira-chat-subtitle");
+  if (!container || !data.currentPhase) return;
+
+  if (subtitleEl) {
+    subtitleEl.textContent = `Bekerja di bawah protokol medis ${data.patientPathway.dpjp_name || "DPJP Konsultan"}`;
+  }
+
+  const phase = data.currentPhase;
+  const meds = data.pathway.common_medications || [];
+
+  let html = `
+    <!-- Bubble 1: Sapaan Hangat & Pengingat Obat (Value First) -->
+    <div class="mira-msg-row">
+      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      <div class="mira-bubble">
+        <div style="font-size: 11px; color: #0284c7; font-weight: 700; margin-bottom: 4px;">MIRA CLINICAL ASSISTANT · H+${phase.day}</div>
+        <p style="margin: 0 0 8px 0;">
+          ${phase.proactive_greeting}
+        </p>
+        <div class="mira-bubble-value">
+          <strong>💊 Pengingat Obat Terjadwal Hari Ini:</strong>
+          <div style="margin-top: 4px;">
+            ${meds
+              .slice(0, 2)
+              .map(
+                (m) =>
+                  `• <strong>${m.name}</strong> (${m.dose}) - <em>${m.timing}</em>`,
+              )
+              .join("<br>")}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bubble 2: Edukasi & Semangat Pemulihan (Value First) -->
+    <div class="mira-msg-row">
+      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      <div class="mira-bubble">
+        <div style="font-size: 11px; color: #059669; font-weight: 700; margin-bottom: 4px;">💡 TIPS KLINIS DPJP</div>
+        <p style="margin: 0;">
+          ${phase.value_first_tip}
+        </p>
+      </div>
+    </div>
+
+    <!-- Bubble 3: Pertanyaan Check-in Terfokus -->
+    <div class="mira-msg-row">
+      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      <div class="mira-bubble" style="border: 2px solid #bae6fd; background: #f0f9ff;">
+        <div style="font-size: 11px; color: #0284c7; font-weight: 700; margin-bottom: 4px;">❓ PERTANYAAN CHECK-IN FASE ${phase.phase.toUpperCase()}</div>
+        <p style="margin: 0; font-size: 15px; font-weight: 700; color: #0369a1;">
+          "${phase.question}"
+        </p>
+      </div>
+    </div>
+  `;
+
+  // Render respons masa lalu jika ada di hari ini
+  if (data.pastResponses && data.pastResponses.length > 0) {
+    const todayResp = data.pastResponses.find((r) => r.phase_day === phase.day);
+    if (todayResp) {
+      const optLabel =
+        todayResp.response_option === "membaik"
+          ? "🟢 Kondisi Membaik / Nyaman"
+          : todayResp.response_option === "masih_gejala"
+            ? "🟡 Masih Ada Gejala Ringan"
+            : "🔴 Butuh Bantuan Medis Segera";
+      html += `
+        <div class="mira-msg-row user">
+          <div class="mira-bubble user">
+            <div style="font-size: 11px; color: #bae6fd; margin-bottom: 4px;">JAWABAN ANDA (${todayResp.created_at})</div>
+            <strong style="font-size: 14px;">${optLabel}</strong>
+            ${todayResp.patient_notes ? `<p style="margin: 6px 0 0 0; font-size: 13px; opacity: 0.95;">"${todayResp.patient_notes}"</p>` : ""}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+/**
+ * Render Daftar Obat & Red Flags di Kolom Kanan
+ */
+function renderMiraMedsAndRedFlags(data) {
+  const medsContainer = document.getElementById("mira-prescribed-meds-list");
+  const redFlagsContainer = document.getElementById("mira-red-flags-list");
+  const kontrolText = document.getElementById("mira-kontrol-text");
+
+  if (medsContainer && data.pathway.common_medications) {
+    medsContainer.innerHTML = data.pathway.common_medications
+      .map(
+        (m) => `
+      <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="font-size: 13.5px; color: var(--text-main);">${m.name}</strong>
+          <span style="font-size: 11.5px; background: #e0f2fe; color: #0284c7; padding: 2px 6px; border-radius: 6px; font-weight: 700;">${m.dose}</span>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+          ⏰ ${m.timing} · <em>${m.purpose}</em>
+        </div>
+      </div>
+    `,
+      )
+      .join("");
+  }
+
+  if (redFlagsContainer && data.pathway.red_flags) {
+    redFlagsContainer.innerHTML = data.pathway.red_flags
+      .map(
+        (rf) => `
+      <li style="margin-bottom: 6px;">${rf}</li>
+    `,
+      )
+      .join("");
+  }
+
+  if (kontrolText && data.pathway.target_kontrol_interval) {
+    kontrolText.textContent = `${data.pathway.target_kontrol_interval} · DPJP: ${data.patientPathway.dpjp_name}`;
+  }
+}
+
+/**
+ * Pilih Opsi One-Tap Response (🟢 Membaik / 🟡 Masih Gejala / 🔴 Butuh Bantuan)
+ */
+function selectOneTapOption(optionKey) {
+  state.selectedOneTapOption = optionKey;
+  document
+    .querySelectorAll(".one-tap-card")
+    .forEach((card) => card.classList.remove("selected"));
+
+  const cardId =
+    optionKey === "membaik"
+      ? "card-opt-membaik"
+      : optionKey === "masih_gejala"
+        ? "card-opt-gejala"
+        : "card-opt-bantuan";
+  const el = document.getElementById(cardId);
+  if (el) el.classList.add("selected");
+}
+
+/**
+ * Submit Check-in Response Pasien ke Triase Engine
+ */
+async function submitMiraCheckin() {
+  if (!state.selectedOneTapOption) {
+    alert(
+      "Silakan pilih salah satu dari 3 opsi respons (🟢 Membaik, 🟡 Masih Gejala, atau 🔴 Butuh Bantuan) terlebih dahulu.",
+    );
+    return;
+  }
+
+  const mpiId = state.currentMpiId || "MPI-0001";
+  const pathwayId = state.miraData
+    ? state.miraData.pathway.id
+    : "pasca_pci_jantung";
+  const phaseId =
+    state.miraData && state.miraData.currentPhase
+      ? state.miraData.currentPhase.id
+      : "phase_h3";
+  const notesInput = document.getElementById("mira-checkin-notes");
+  const patientNotes = notesInput ? notesInput.value.trim() : "";
+
+  const btn = document.getElementById("btn-submit-mira-checkin");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ Menjalankan Triase Engine MIRA...";
+  }
+
+  try {
+    const res = await fetch("/api/mira/checkin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mpiId,
+        pathwayId,
+        phaseId,
+        responseOption: state.selectedOneTapOption,
+        patientNotes,
+      }),
+    }).then((r) => r.json());
+
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "🚀 Kirim Jawaban Check-in & Jalankan Triase";
+    }
+
+    if (res.sukses) {
+      // Render Banner Hasil Triase
+      renderTriageOutcome(res);
+
+      // Tambahkan chat bubble interaktif
+      await loadMiraPathway();
+      await loadLoyaltyData();
+      await loadPatientTimeline();
+      await loadNursePriorityQueue();
+
+      // Reset form input
+      if (notesInput) notesInput.value = "";
+    } else {
+      alert("Gagal mengirim check-in: " + (res.error || "Terjadi kesalahan"));
+    }
+  } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "🚀 Kirim Jawaban Check-in & Jalankan Triase";
+    }
+    alert("Terjadi kesalahan koneksi saat mengirim check-in MIRA.");
+  }
+}
+
+/**
+ * Render Banner Hasil Triase Klinis MIRA
+ */
+function renderTriageOutcome(res) {
+  const container = document.getElementById("mira-triage-outcome-container");
+  if (!container) return;
+
+  container.style.display = "block";
+  const level = res.triage_level || "rendah";
+
+  let bannerClass = "triage-rendah";
+  let badgeIcon = "🟢";
+  let badgeTitle = "Triase Rendah · Pemulihan Sesuai Jalur Klinis";
+  let extraActions = "";
+
+  if (level === "tinggi") {
+    bannerClass = "triage-tinggi";
+    badgeIcon = "🚨";
+    badgeTitle = "TRIASE TINGGI · BUTUH PENANGANAN KLINIS SEGERA";
+    extraActions = `
+      <div class="emergency-btn-row">
+        <a href="tel:1500111" class="btn-emergency">
+          📞 Hubungi Hotline IGD 24 Jam Mandaya: 1500-111
+        </a>
+        <button class="btn btn-secondary btn-sm" style="background: white; color: #dc2626; border-color: #dc2626;" onclick="toggleDrawer(); switchDrawerTab('mira-nurse');">
+          🩺 Lihat Antrean Perawat Jaga
+        </button>
+      </div>
+    `;
+  } else if (level === "sedang") {
+    bannerClass = "triage-sedang";
+    badgeIcon = "⚠️";
+    badgeTitle = "Triase Sedang · Pemantauan Gejala & Tele-Nurse";
+    extraActions = `
+      <div style="margin-top: 10px;">
+        <button class="btn btn-primary btn-sm" onclick="switchView('doctors')">
+          🩺 Buka Chat Konsultasi Dokter / Perawat
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div class="triage-result-banner ${bannerClass}">
+      <div style="font-size: 28px;">${badgeIcon}</div>
+      <div style="flex: 1;">
+        <div style="font-size: 14px; font-weight: 800; margin-bottom: 4px;">
+          ${badgeTitle}
+        </div>
+        <p style="margin: 0 0 6px 0; font-size: 13px; line-height: 1.5;">
+          ${res.triage_summary || res.pesan}
+        </p>
+        <div style="font-size: 12px; opacity: 0.9;">
+          <strong>Rekomendasi Tindakan:</strong> ${res.triage_action}
+        </div>
+        ${
+          res.points_awarded > 0
+            ? `
+          <div style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 12px; margin-top: 8px;">
+            🎉 Selamat! +${res.points_awarded} Mandaya CarePoint berhasil ditambahkan ke akun Anda!
+          </div>
+        `
+            : ""
+        }
+        ${extraActions}
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Ganti Pathway Template Simulasi MIRA
+ */
+async function changeMiraPathwaySimulation() {
+  const select = document.getElementById("mira-sim-pathway-select");
+  if (!select) return;
+  const pathwayId = select.value;
+  const mpiId = state.currentMpiId || "MPI-0001";
+
+  try {
+    await fetch("/api/mira/pathway/set-phase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mpiId, pathwayId, targetDay: 3 }),
+    });
+    await loadMiraPathway();
+  } catch (err) {
+    console.error("Error changing pathway simulation:", err);
+  }
+}
+
+/**
+ * Lompat Hari Simulasi MIRA (H+1, H+3, H+7, H+14, H+30)
+ */
+async function setMiraDaySimulation(targetDay) {
+  const select = document.getElementById("mira-sim-pathway-select");
+  const pathwayId = select ? select.value : "pasca_pci_jantung";
+  const mpiId = state.currentMpiId || "MPI-0001";
+
+  try {
+    await fetch("/api/mira/pathway/set-phase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mpiId, pathwayId, targetDay }),
+    });
+    await loadMiraPathway();
+  } catch (err) {
+    console.error("Error setting day simulation:", err);
+  }
+}
+
+/**
+ * Muat Papan Pantau Triase Perawat & Case Manager (Priority Queue)
+ */
+async function loadNursePriorityQueue() {
+  try {
+    const res = await fetch("/api/mira/nurse-queue").then((r) => r.json());
+    if (res.sukses && res.data) {
+      state.miraNurseQueue = res.data.queue || [];
+
+      // Update KPI counters
+      const highEl = document.getElementById("nurse-stat-high");
+      const medEl = document.getElementById("nurse-stat-medium");
+      const lowEl = document.getElementById("nurse-stat-low");
+
+      if (highEl) highEl.textContent = `${res.data.stats.tinggi} Pasien`;
+      if (medEl) medEl.textContent = `${res.data.stats.sedang} Pasien`;
+      if (lowEl) lowEl.textContent = `${res.data.stats.selesai} Selesai`;
+
+      renderNurseQueueTable(res.data.queue);
+    }
+  } catch (err) {
+    console.error("Error loading nurse queue:", err);
+  }
+}
+
+/**
+ * Render Tabel Antrean Prioritas Perawat
+ */
+function renderNurseQueueTable(queue) {
+  const container = document.getElementById("mira-nurse-queue-container");
+  if (!container) return;
+
+  if (!queue || queue.length === 0) {
+    container.innerHTML = `
+      <div style="background: #f8fafc; border: 1px dashed var(--border-color); border-radius: 12px; padding: 24px; text-align: center; color: var(--text-muted);">
+        <span style="font-size: 24px; display: block; margin-bottom: 6px;">🎉</span>
+        <strong>Tidak Ada Antrean Kritis Pasien</strong>
+        <p style="font-size: 12px; margin: 4px 0 0 0;">Semua pasien pemulihan pascarawat berada dalam status stabil & aman.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="overflow-x: auto;">
+      <table class="data-table" style="width: 100%; font-size: 12.5px;">
+        <thead>
+          <tr>
+            <th>Prioritas Triase</th>
+            <th>Pasien & MPI</th>
+            <th>Care Pathway</th>
+            <th>Fase / Titik Sentuh</th>
+            <th>Ringkasan Gejala & Keluhan</th>
+            <th>Status Tindakan</th>
+            <th>Aksi Staf Klinis</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${queue
+            .map((item) => {
+              const isHigh = item.triage_level === "tinggi";
+              const isMed = item.triage_level === "sedang";
+              const badgeClass = isHigh
+                ? "triage-badge-tinggi"
+                : isMed
+                  ? "triage-badge-sedang"
+                  : "triage-badge-rendah";
+              const badgeText = isHigh
+                ? "🚨 TINGGI (RED FLAG)"
+                : isMed
+                  ? "⚠️ SEDANG (PANTAU)"
+                  : "🟢 RENDAH (AMAN)";
+
+              return `
+              <tr style="${isHigh ? "background: #fff1f2;" : ""}">
+                <td>
+                  <span class="triage-badge-pill ${badgeClass}">${badgeText}</span>
+                </td>
+                <td>
+                  <strong>${item.patient_name}</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">${item.mpi_id}</div>
+                </td>
+                <td>${item.pathway_name}</td>
+                <td>${item.phase_name}</td>
+                <td>
+                  <div style="font-weight: 600; color: ${isHigh ? "#991b1b" : "var(--text-main)"};">${item.symptom_summary}</div>
+                  ${item.red_flags ? `<div style="font-size: 11px; color: #dc2626; margin-top: 2px;">⚠️ Red flags: ${item.red_flags}</div>` : ""}
+                </td>
+                <td>
+                  <span style="font-size: 11.5px; font-weight: 700; color: ${item.nurse_status === "selesai" ? "#16a34a" : "#d97706"};">
+                    ${item.nurse_status === "selesai" ? "✓ Ditangani" : "⏳ Perlu Tindakan"}
+                  </span>
+                  ${item.assigned_nurse ? `<div style="font-size: 11px; color: var(--text-muted);">${item.assigned_nurse}</div>` : ""}
+                </td>
+                <td>
+                  <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                    <button class="btn btn-secondary btn-sm" style="padding: 4px 8px; font-size: 11px;" onclick="handleNurseAction(${item.id}, 'call')" title="Catat Panggilan Tele-Nurse">
+                      📞 Tele-Nurse
+                    </button>
+                    <button class="btn btn-secondary btn-sm" style="padding: 4px 8px; font-size: 11px;" onclick="handleNurseAction(${item.id}, 'escalate')" title="Eskalasi ke DPJP Spesialis">
+                      🩺 Eskalasi DPJP
+                    </button>
+                    <button class="btn btn-primary btn-sm" style="padding: 4px 8px; font-size: 11px; background: #16a34a; border-color: #16a34a;" onclick="handleNurseAction(${item.id}, 'resolve')" title="Tandai Selesai">
+                      ✓ Selesai
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+            })
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/**
+ * Handle Aksi Perawat pada Antrean Prioritas
+ */
+async function handleNurseAction(queueId, actionType) {
+  let notes = "";
+  if (actionType === "call") {
+    notes = prompt(
+      "Catatan panggilan tele-nurse kepada pasien / keluarga:",
+      "Pasien dihubungi via WhatsApp call, kondisi keluhan telah dievaluasi dan diberikan edukasi penanganan.",
+    );
+    if (notes === null) return;
+  } else if (actionType === "escalate") {
+    notes = prompt(
+      "Catatan eskalasi ke dokter penanggung jawab (DPJP):",
+      "Laporan dikirim ke dr. Sp.JP untuk instruksi penyesuaian dosis atau evaluasi poli.",
+    );
+    if (notes === null) return;
+  }
+
+  try {
+    const res = await fetch("/api/mira/nurse-queue/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        queueId,
+        actionType,
+        notes,
+        nurseName: "Ns. Ratih Wardani, S.Kep",
+      }),
+    }).then((r) => r.json());
+
+    if (res.sukses) {
+      alert(res.pesan);
+      await loadNursePriorityQueue();
+      await loadPatientTimeline();
+    } else {
+      alert("Gagal memproses aksi perawat: " + res.error);
+    }
+  } catch (err) {
+    alert("Terjadi kesalahan saat memproses tindakan perawat.");
+  }
 }

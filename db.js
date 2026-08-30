@@ -275,6 +275,51 @@ export function initSchema() {
       detail TEXT,
       created_at TEXT NOT NULL
     );
+
+    -- Tabel Pathway Pasien MIRA (Modul 2)
+    CREATE TABLE IF NOT EXISTS mira_patient_pathways (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      mpi_id TEXT NOT NULL,
+      pathway_id TEXT NOT NULL,
+      start_date TEXT NOT NULL,
+      current_day INTEGER DEFAULT 3,
+      status TEXT DEFAULT 'active',
+      dpjp_name TEXT,
+      diagnosis TEXT
+    );
+
+    -- Tabel Respons Check-in MIRA
+    CREATE TABLE IF NOT EXISTS mira_checkin_responses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      mpi_id TEXT NOT NULL,
+      pathway_id TEXT NOT NULL,
+      phase_id TEXT NOT NULL,
+      phase_day INTEGER NOT NULL,
+      response_option TEXT NOT NULL,
+      patient_notes TEXT,
+      triage_level TEXT NOT NULL,
+      triage_summary TEXT NOT NULL,
+      red_flags_detected TEXT,
+      points_awarded INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL
+    );
+
+    -- Tabel Antrean Prioritas Triase Perawat MIRA
+    CREATE TABLE IF NOT EXISTS mira_nurse_priority_queue (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      mpi_id TEXT NOT NULL,
+      patient_name TEXT NOT NULL,
+      pathway_name TEXT NOT NULL,
+      phase_name TEXT NOT NULL,
+      triage_level TEXT NOT NULL,
+      symptom_summary TEXT NOT NULL,
+      red_flags TEXT,
+      nurse_status TEXT DEFAULT 'perlu_tindakan',
+      action_notes TEXT,
+      assigned_nurse TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
   `);
 
   seedPurposes();
