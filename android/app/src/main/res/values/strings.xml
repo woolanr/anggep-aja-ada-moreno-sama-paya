@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Care Plus Mandaya</string>
+    <string name="title_activity_main">Care Plus Mandaya</string>
+    <string name="package_name">com.mandaya.careplus</string>
+    <string name="custom_url_scheme">com.mandaya.careplus</string>
+</resources>

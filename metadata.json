@@ -1,6 +1,6 @@
 {
   "name": "Satu Pasien, Satu Riwayat - Mandaya Royal Hospital Puri",
-  "description": "Backend prototipe data foundation, Master Patient Index (MPI), Consent Gate, Data Minimization, and Rule-based Risk Engine untuk Mandaya Royal Hospital Puri.",
+  "description": "Platform terpadu Master Patient Index (MPI), Mandaya CarePoint Loyalty Engine (Point Prescription, Care Rewards, Family Pool, Micro-burn, Gamifikasi), Consent Gate, dan Rule-based Risk Engine untuk Mandaya Royal Hospital Puri.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
