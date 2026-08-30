@@ -1,719 +1,2329 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Satu Pasien, Satu Riwayat - Mandaya Royal Hospital Puri</title>
-  <meta name="description" content="Portal Medis Terpadu Mandaya Royal Hospital Puri: Satu Pasien, Satu Riwayat dengan Master Patient Index, Perlindungan Data UU PDP, dan Pemantauan Risiko Klinis.">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="icon" type="image/svg+xml" href="/logo.svg">
-</head>
-<body>
-  <!-- Header Top Bar Aplikasi -->
-  <header class="care-header">
-    <div class="care-nav-container">
-      <div class="care-brand" onclick="switchView('home')">
-        <img src="/logo.svg" alt="Care+ Logo" class="care-brand-logo">
-        <div>
-          <div class="care-brand-name">Care<span class="care-brand-plus">+</span></div>
-          <div class="care-brand-sub">Mandaya Royal Hospital Puri</div>
-        </div>
-      </div>
-
-      <nav class="care-nav-links">
-        <button class="care-nav-btn active" id="nav-home" onclick="switchView('home')">
-          🏠 Beranda
-        </button>
-        <button class="care-nav-btn" id="nav-doctors" onclick="switchView('doctors')">
-          🩺 Chat Dokter
-        </button>
-        <button class="care-nav-btn" id="nav-booking" onclick="switchView('booking')">
-          📅 Reservasi Baru
-        </button>
-        <button class="care-nav-btn" id="nav-profile" onclick="switchView('profile')">
-          📜 Profil & Riwayat
-        </button>
-      </nav>
-
-      <div class="care-nav-actions">
-        <!-- Theme Switcher Palette -->
-        <div class="theme-selector-group" title="Pilih Tema Warna">
-          <div class="theme-dot blue active" onclick="setTheme('blue')"></div>
-          <div class="theme-dot green" onclick="setTheme('green')"></div>
-          <div class="theme-dot purple" onclick="setTheme('purple')"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satu Pasien, Satu Riwayat - Mandaya Royal Hospital Puri</title>
+    <meta
+      name="description"
+      content="Portal Medis Terpadu Mandaya Royal Hospital Puri: Satu Pasien, Satu Riwayat dengan Master Patient Index, Perlindungan Data UU PDP, dan Pemantauan Risiko Klinis."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  </head>
+  <body>
+    <!-- Header Top Bar Aplikasi -->
+    <header class="care-header">
+      <div class="care-nav-container">
+        <div class="care-brand" onclick="switchView('home')">
+          <img src="/logo.svg" alt="Care+ Logo" class="care-brand-logo" />
+          <div>
+            <div class="care-brand-name">
+              Care<span class="care-brand-plus">+</span>
+            </div>
+            <div class="care-brand-sub">Mandaya Royal Hospital Puri</div>
+          </div>
         </div>
 
-        <!-- 3-Dots Management Menu Button -->
-        <button class="three-dots-btn" onclick="toggleDrawer()" title="Menu Manajemen Medis & Panel Demo Juri" id="btn-three-dots">
-          ⋮
-          <span class="three-dots-badge" id="badge-risk-count" style="display: none;">0</span>
-        </button>
+        <nav class="care-nav-links">
+          <button
+            class="care-nav-btn active"
+            id="nav-home"
+            onclick="switchView('home')"
+          >
+            🏠 Beranda
+          </button>
+          <button
+            class="care-nav-btn"
+            id="nav-loyalty"
+            onclick="switchView('loyalty')"
+          >
+            🏆 CarePoint
+          </button>
+          <button
+            class="care-nav-btn"
+            id="nav-doctors"
+            onclick="switchView('doctors')"
+          >
+            🩺 Chat Dokter
+          </button>
+          <button
+            class="care-nav-btn"
+            id="nav-booking"
+            onclick="switchView('booking')"
+          >
+            📅 Reservasi Baru
+          </button>
+          <button
+            class="care-nav-btn"
+            id="nav-profile"
+            onclick="switchView('profile')"
+          >
+            📜 Profil & Riwayat
+          </button>
+        </nav>
+
+        <div class="care-nav-actions">
+          <!-- Quick Points Badge Pill -->
+          <div
+            class="quick-points-chip"
+            onclick="switchView('loyalty')"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              background: #fef3c7;
+              border: 1px solid #fde68a;
+              padding: 6px 12px;
+              border-radius: 20px;
+              cursor: pointer;
+              font-size: 13px;
+              font-weight: 700;
+              color: #b45309;
+            "
+            title="Lihat Mandaya CarePoint"
+          >
+            <span>🪙</span>
+            <span id="nav-header-points">2.450 Pts</span>
+          </div>
+
+          <!-- Theme Switcher Palette -->
+          <div class="theme-selector-group" title="Pilih Tema Warna">
+            <div class="theme-dot blue active" onclick="setTheme('blue')"></div>
+            <div class="theme-dot green" onclick="setTheme('green')"></div>
+            <div class="theme-dot purple" onclick="setTheme('purple')"></div>
+          </div>
+
+          <!-- 3-Dots Management Menu Button -->
+          <button
+            class="three-dots-btn"
+            onclick="toggleDrawer()"
+            title="Menu Manajemen Medis & Panel Demo Juri"
+            id="btn-three-dots"
+          >
+            ⋮
+            <span
+              class="three-dots-badge"
+              id="badge-risk-count"
+              style="display: none"
+              >0</span
+            >
+          </button>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- Container Utama -->
-  <main class="main-wrapper">
-
-    <!-- ====================================================================
+    <!-- Container Utama -->
+    <main class="main-wrapper">
+      <!-- ====================================================================
          PAGE VIEW 1: BERANDA (HOME)
          ==================================================================== -->
-    <section id="view-home" class="page-view active">
-      <!-- Hero Section -->
-      <div class="care-hero">
-        <div class="hero-overlay-art"></div>
-        <div class="hero-content">
-          <div class="hero-badge-tag">
-            ✨ SATU PASIEN, SATU RIWAYAT · MANDAYA PURII
-          </div>
-          <h1 class="hero-title">
-            Konsultasi dokter & pemantauan pasca rawat, kapan saja.
-          </h1>
-          <p class="hero-desc">
-            Terintegrasi dengan Master Patient Index (MPI) 5 sistem Mandaya Royal Hospital Puri. Akses rekam medis terpadu, konsultasi dokter spesialis, jadwal obat, dan perlindungan privasi UU PDP.
-          </p>
-          <div class="hero-actions">
-            <button class="btn btn-white" onclick="switchView('doctors')">
-              🩺 Konsultasi Dokter
-            </button>
-            <button class="btn btn-outline-white" onclick="switchView('profile')">
-              📂 Rekam Medis Terpadu
-            </button>
-          </div>
-        </div>
-
-        <!-- Live Statistics Row -->
-        <div class="hero-stats-row">
-          <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-mpi-count">9</div>
-            <div class="hero-stat-lbl">Pasien MPI Terpadu</div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-doc-count">4</div>
-            <div class="hero-stat-lbl">Dokter Spesialis</div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-booking-count">0</div>
-            <div class="hero-stat-lbl">Kunjungan/Reservasi</div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-risk-count" style="color: #fca5a5;">0</div>
-            <div class="hero-stat-lbl">Pasien Pantau Risiko</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Action Cards Grid -->
-      <div class="quick-cards-grid">
-        <!-- Card 1: Resep Obat Hari Ini -->
-        <div class="quick-card">
-          <div>
-            <div class="quick-card-header">
-              <div class="quick-card-title">
-                💊 Resep Obat Hari Ini
-              </div>
-              <span class="badge-system badge-CARE_DOKTER" id="badge-patient-name">Ibu Sari Handayani</span>
+      <section id="view-home" class="page-view active">
+        <!-- Hero Section -->
+        <div class="care-hero">
+          <div class="hero-overlay-art"></div>
+          <div class="hero-content">
+            <div class="hero-badge-tag">
+              ✨ SATU PASIEN, SATU RIWAYAT · MANDAYA PURII
             </div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
-              Tandai obat yang telah diminum untuk mendapatkan poin sehat & kepatuhan klinis.
+            <h1 class="hero-title">
+              Konsultasi dokter & pemantauan pasca rawat, kapan saja.
+            </h1>
+            <p class="hero-desc">
+              Terintegrasi dengan Master Patient Index (MPI) 5 sistem Mandaya
+              Royal Hospital Puri. Akses rekam medis terpadu, konsultasi dokter
+              spesialis, jadwal obat, dan perlindungan privasi UU PDP.
             </p>
-            <div id="home-medications-list">
+            <div class="hero-actions">
+              <button class="btn btn-white" onclick="switchView('doctors')">
+                🩺 Konsultasi Dokter
+              </button>
+              <button
+                class="btn btn-outline-white"
+                onclick="switchView('profile')"
+              >
+                📂 Rekam Medis Terpadu
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Statistics Row -->
+          <div class="hero-stats-row">
+            <div class="hero-stat-card">
+              <div class="hero-stat-val" id="stat-mpi-count">9</div>
+              <div class="hero-stat-lbl">Pasien MPI Terpadu</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-val" id="stat-doc-count">4</div>
+              <div class="hero-stat-lbl">Dokter Spesialis</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-val" id="stat-booking-count">0</div>
+              <div class="hero-stat-lbl">Kunjungan/Reservasi</div>
+            </div>
+            <div class="hero-stat-card">
+              <div
+                class="hero-stat-val"
+                id="stat-risk-count"
+                style="color: #fca5a5"
+              >
+                0
+              </div>
+              <div class="hero-stat-lbl">Pasien Pantau Risiko</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action Cards Grid -->
+        <div class="quick-cards-grid">
+          <!-- Card 1: Resep Obat Hari Ini -->
+          <div class="quick-card">
+            <div>
+              <div class="quick-card-header">
+                <div class="quick-card-title">💊 Resep Obat Hari Ini</div>
+                <span
+                  class="badge-system badge-CARE_DOKTER"
+                  id="badge-patient-name"
+                  >Ibu Sari Handayani</span
+                >
+              </div>
+              <p
+                style="
+                  font-size: 13px;
+                  color: var(--text-muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Tandai obat yang telah diminum untuk mendapatkan poin sehat &
+                kepatuhan klinis.
+              </p>
+              <div id="home-medications-list">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+            <div
+              style="
+                font-size: 12px;
+                color: var(--text-muted);
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+              "
+            >
+              <span
+                >Kepatuhan: <strong id="home-adherence-rate">100%</strong></span
+              >
+              <span style="color: #d97706; font-weight: 700"
+                >+10 Poin / Dosis</span
+              >
+            </div>
+          </div>
+
+          <!-- Card 2: Check-in Mandiri Gejala & Skala Nyeri -->
+          <div class="quick-card">
+            <div>
+              <div class="quick-card-header">
+                <div class="quick-card-title">🌡️ Check-in Gejala & Nyeri</div>
+                <span class="badge-system badge-CRM">Real-time DPJP</span>
+              </div>
+              <p
+                style="
+                  font-size: 13px;
+                  color: var(--text-muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Laporkan skala nyeri (0–10) dan gejala yang Anda rasakan untuk
+                pemantauan otomatis tim medis.
+              </p>
+              <div
+                style="
+                  background: var(--bg-page);
+                  border: 1px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 14px;
+                  margin-bottom: 12px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 13px;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span>Skala Nyeri Terakhir:</span>
+                  <strong id="home-last-pain" style="color: var(--primary)"
+                    >2 / 10 (Ringan)</strong
+                  >
+                </div>
+                <div
+                  style="font-size: 12px; color: var(--text-muted)"
+                  id="home-last-symptoms"
+                >
+                  Gejala: Nyeri ringan di area luka pasca operasi
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openCheckinModal()"
+              style="width: 100%"
+            >
+              📝 Isi Check-in Sekarang
+            </button>
+          </div>
+
+          <!-- Card 3: Jadwal Kontrol Dokter Berikutnya -->
+          <div class="quick-card">
+            <div>
+              <div class="quick-card-header">
+                <div class="quick-card-title">📅 Kontrol Berikutnya</div>
+                <span class="badge-system badge-HIS">Poli Spesialis</span>
+              </div>
+              <p
+                style="
+                  font-size: 13px;
+                  color: var(--text-muted);
+                  margin-bottom: 12px;
+                "
+              >
+                Konfirmasi kehadiran Anda sebelum jadwal konsultasi untuk
+                mempersiapkan rekam medis.
+              </p>
+              <div
+                style="
+                  background: #e0f2fe;
+                  border: 1px solid #bae6fd;
+                  border-radius: 12px;
+                  padding: 14px;
+                  margin-bottom: 12px;
+                "
+              >
+                <div style="font-weight: 700; font-size: 14px; color: #0369a1">
+                  Poli Spesialis Jantung & Pembuluh Darah
+                </div>
+                <div style="font-size: 12px; color: #0284c7; margin-top: 2px">
+                  dr. Beny Hartono, Sp.JP · Mandaya Royal Hospital Puri
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #0c4a6e;
+                    margin-top: 6px;
+                  "
+                  id="home-control-date"
+                >
+                  Kamis, 4 Sept 2026 (pk 10:00 WIB)
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn btn-accent btn-sm"
+              onclick="confirmAppointment()"
+              style="width: 100%"
+            >
+              ✓ Konfirmasi Kehadiran (+50 Pts)
+            </button>
+          </div>
+
+          <!-- Card 4: Mandaya CarePoint & Point Prescription Engine -->
+          <div
+            class="quick-card"
+            style="
+              border: 2px solid #fde68a;
+              background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+            "
+          >
+            <div>
+              <div class="quick-card-header">
+                <div class="quick-card-title" style="color: #b45309">
+                  🏆 Mandaya CarePoint
+                </div>
+                <span
+                  class="tier-badge-pill tier-gold"
+                  style="font-size: 10px; padding: 2px 8px"
+                  >Gold Care</span
+                >
+              </div>
+              <p
+                style="
+                  font-size: 13px;
+                  color: var(--text-muted);
+                  margin-bottom: 12px;
+                "
+              >
+                Kumpulkan poin dari kontrol, minum obat & misi sehat. Tukar
+                untuk preskripsi klinis DPJP atau diskon otomatis.
+              </p>
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid #fef3c7;
+                  border-radius: 12px;
+                  padding: 12px;
+                  margin-bottom: 12px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted)">
+                    Saldo Tersedia
+                  </div>
+                  <div
+                    style="font-size: 22px; font-weight: 800; color: #b45309"
+                  >
+                    2.450
+                    <span style="font-size: 13px; font-weight: 600">Pts</span>
+                  </div>
+                </div>
+                <div style="text-align: right">
+                  <div style="font-size: 11px; color: var(--text-muted)">
+                    Rekomendasi DPJP
+                  </div>
+                  <div
+                    style="font-size: 12px; font-weight: 700; color: #0284c7"
+                  >
+                    3 Preskripsi Aktif
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="switchView('loyalty')"
+              style="
+                width: 100%;
+                background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+                border: none;
+              "
+            >
+              🎁 Buka Mandaya CarePoint →
+            </button>
+          </div>
+        </div>
+
+        <!-- Section: Dokter Tersedia Hari Ini -->
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-title">Dokter Spesialis Tersedia</h2>
+            <p style="font-size: 13.5px; color: var(--text-muted)">
+              Pilih dokter spesialis untuk konsultasi online atau buat janji
+              medis.
+            </p>
+          </div>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="switchView('doctors')"
+          >
+            Lihat Semua Dokter →
+          </button>
+        </div>
+
+        <div class="doctor-grid" id="home-doctor-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         PAGE VIEW 2: CHAT DOKTER
+         ==================================================================== -->
+      <section id="view-doctors" class="page-view">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-title">Konsultasi & Chat Dokter</h2>
+            <p style="font-size: 13.5px; color: var(--text-muted)">
+              Terhubung langsung dengan dokter spesialis Mandaya Royal Hospital
+              Puri.
+            </p>
+          </div>
+        </div>
+
+        <div class="chat-container">
+          <!-- Sidebar Daftar Dokter -->
+          <div class="chat-sidebar">
+            <input
+              type="text"
+              placeholder="🔍 Cari nama atau spesialis..."
+              class="form-input"
+              style="margin-bottom: 12px; font-size: 13px"
+              onkeyup="filterDoctorsChat(this.value)"
+            />
+            <div id="chat-doctor-list">
               <!-- Rendered via JS -->
             </div>
           </div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px; display: flex; justify-content: space-between;">
-            <span>Kepatuhan: <strong id="home-adherence-rate">100%</strong></span>
-            <span style="color: #d97706; font-weight: 700;">+10 Poin / Dosis</span>
+
+          <!-- Area Chat Room -->
+          <div class="chat-area">
+            <div class="chat-header">
+              <div style="display: flex; align-items: center; gap: 12px">
+                <img
+                  id="active-chat-avatar"
+                  src="/anisa.svg"
+                  alt="Doctor"
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 2px solid var(--primary-light);
+                  "
+                />
+                <div>
+                  <div
+                    id="active-chat-name"
+                    style="
+                      font-weight: 700;
+                      font-size: 15px;
+                      color: var(--text-main);
+                    "
+                  >
+                    dr. Anisa Putri, Sp.A
+                  </div>
+                  <div
+                    id="active-chat-spec"
+                    style="
+                      font-size: 12px;
+                      color: var(--primary);
+                      font-weight: 600;
+                    "
+                  >
+                    Spesialis Anak · Online
+                  </div>
+                </div>
+              </div>
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="openBookingForCurrentDoctor()"
+              >
+                📅 Buat Janji Temu
+              </button>
+            </div>
+
+            <div class="chat-messages" id="chat-messages-container">
+              <!-- Messages rendered via JS -->
+            </div>
+
+            <form class="chat-input-bar" onsubmit="sendChatMessage(event)">
+              <input
+                type="text"
+                id="chat-input-field"
+                class="chat-input"
+                placeholder="Ketik pertanyaan atau keluhan Anda di sini..."
+                autocomplete="off"
+              />
+              <button type="submit" class="btn btn-primary">Kirim</button>
+            </form>
           </div>
         </div>
+      </section>
 
-        <!-- Card 2: Check-in Mandiri Gejala & Skala Nyeri -->
-        <div class="quick-card">
-          <div>
-            <div class="quick-card-header">
-              <div class="quick-card-title">
-                🌡️ Check-in Gejala & Nyeri
-              </div>
-              <span class="badge-system badge-CRM">Real-time DPJP</span>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
-              Laporkan skala nyeri (0–10) dan gejala yang Anda rasakan untuk pemantauan otomatis tim medis.
-            </p>
-            <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-              <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-                <span>Skala Nyeri Terakhir:</span>
-                <strong id="home-last-pain" style="color: var(--primary);">2 / 10 (Ringan)</strong>
-              </div>
-              <div style="font-size: 12px; color: var(--text-muted);" id="home-last-symptoms">
-                Gejala: Nyeri ringan di area luka pasca operasi
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="openCheckinModal()" style="width: 100%;">
-            📝 Isi Check-in Sekarang
-          </button>
-        </div>
-
-        <!-- Card 3: Jadwal Kontrol Dokter Berikutnya -->
-        <div class="quick-card">
-          <div>
-            <div class="quick-card-header">
-              <div class="quick-card-title">
-                📅 Kontrol Berikutnya
-              </div>
-              <span class="badge-system badge-HIS">Poli Spesialis</span>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
-              Konfirmasi kehadiran Anda sebelum jadwal konsultasi untuk mempersiapkan rekam medis.
-            </p>
-            <div style="background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-              <div style="font-weight: 700; font-size: 14px; color: #0369a1;">
-                Poli Spesialis Jantung & Pembuluh Darah
-              </div>
-              <div style="font-size: 12px; color: #0284c7; margin-top: 2px;">
-                dr. Beny Hartono, Sp.JP · Mandaya Royal Hospital Puri
-              </div>
-              <div style="font-size: 12px; font-weight: 700; color: #0c4a6e; margin-top: 6px;" id="home-control-date">
-                Kamis, 4 Sept 2026 (pk 10:00 WIB)
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-accent btn-sm" onclick="confirmAppointment()" style="width: 100%;">
-            ✓ Konfirmasi Kehadiran (+50 Pts)
-          </button>
-        </div>
-      </div>
-
-      <!-- Section: Dokter Tersedia Hari Ini -->
-      <div class="section-header-row">
-        <div>
-          <h2 class="section-title">Dokter Spesialis Tersedia</h2>
-          <p style="font-size: 13.5px; color: var(--text-muted);">Pilih dokter spesialis untuk konsultasi online atau buat janji medis.</p>
-        </div>
-        <button class="btn btn-secondary btn-sm" onclick="switchView('doctors')">
-          Lihat Semua Dokter →
-        </button>
-      </div>
-
-      <div class="doctor-grid" id="home-doctor-grid">
-        <!-- Rendered via JS -->
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         PAGE VIEW 2: CHAT DOKTER
+      <!-- ====================================================================
+         PAGE VIEW 3: RESERVASI BARU
          ==================================================================== -->
-    <section id="view-doctors" class="page-view">
-      <div class="section-header-row">
-        <div>
-          <h2 class="section-title">Konsultasi & Chat Dokter</h2>
-          <p style="font-size: 13.5px; color: var(--text-muted);">Terhubung langsung dengan dokter spesialis Mandaya Royal Hospital Puri.</p>
-        </div>
-      </div>
+      <section id="view-booking" class="page-view">
+        <div class="form-card">
+          <div style="margin-bottom: 24px; text-align: center">
+            <h2
+              style="font-size: 24px; font-weight: 800; color: var(--text-main)"
+            >
+              Formulir Reservasi Janji Temu
+            </h2>
+            <p
+              style="font-size: 14px; color: var(--text-muted); margin-top: 4px"
+            >
+              Jadwalkan kunjungan poliklinik atau konsultasi rawat jalan.
+            </p>
+          </div>
 
-      <div class="chat-container">
-        <!-- Sidebar Daftar Dokter -->
-        <div class="chat-sidebar">
-          <input type="text" placeholder="🔍 Cari nama atau spesialis..." class="form-input" style="margin-bottom: 12px; font-size: 13px;" onkeyup="filterDoctorsChat(this.value)">
-          <div id="chat-doctor-list">
+          <form id="booking-form" onsubmit="submitBooking(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Pilih Profil Pasien *</label>
+                <select id="book-profile-select" class="form-select" required>
+                  <!-- Rendered via JS -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Dokter Spesialis Tujuan *</label>
+                <select id="book-doctor-select" class="form-select" required>
+                  <!-- Rendered via JS -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Rumah Sakit / Lokasi *</label>
+                <select id="book-hospital-select" class="form-select" required>
+                  <option value="Mandaya Royal Hospital Puri">
+                    Mandaya Royal Hospital Puri (Pusat)
+                  </option>
+                  <option value="Mandaya Hospital Karawang">
+                    Mandaya Hospital Karawang
+                  </option>
+                  <option value="Klinik Care+ Puri">
+                    Klinik Care+ Puri Mitra
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Tanggal Janji *</label>
+                <input type="date" id="book-date" class="form-input" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Jam Kunjungan *</label>
+                <select id="book-time" class="form-select" required>
+                  <option value="09:00 WIB">09:00 WIB (Pagi)</option>
+                  <option value="11:00 WIB">11:00 WIB (Siang)</option>
+                  <option value="14:00 WIB">14:00 WIB (Sore)</option>
+                  <option value="17:00 WIB">17:00 WIB (Malam)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Suhu Tubuh Pasien (°C)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="30"
+                  max="45"
+                  id="book-temp"
+                  class="form-input"
+                  placeholder="Contoh: 36.5"
+                />
+              </div>
+
+              <div class="form-group full">
+                <label class="form-label"
+                  >Keluhan Utama / Gejala yang Dirasakan *</label
+                >
+                <textarea
+                  id="book-symptom"
+                  class="form-textarea"
+                  rows="3"
+                  placeholder="Jelaskan keluhan, lokasi rasa sakit, atau alasan pemeriksaan secara rinci (minimal 10 karakter)..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group full">
+                <label class="form-label">Riwayat Penyakit / Alergi Obat</label>
+                <input
+                  type="text"
+                  id="book-history"
+                  class="form-input"
+                  placeholder="Contoh: Hipertensi, Alergi Penisilin, Asma, dsb."
+                />
+              </div>
+            </div>
+
+            <!-- CarePoint Auto-Use Benefit Banner on Booking -->
+            <div
+              id="booking-auto-use-banner"
+              style="
+                background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                border: 1px solid #bae6fd;
+                border-radius: 12px;
+                padding: 14px 18px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span style="font-size: 22px">⚡</span>
+                <div>
+                  <div
+                    style="font-weight: 700; font-size: 13.5px; color: #0369a1"
+                  >
+                    Auto-Use My Points Aktif (Hemat Langsung)
+                  </div>
+                  <div
+                    style="font-size: 12px; color: #0284c7"
+                    id="booking-point-quote-text"
+                  >
+                    Estimasi potongan: 500 Poin (Diskon Rp 50.000) dari biaya
+                    konsultasi normal Rp 350.000.
+                  </div>
+                </div>
+              </div>
+              <span
+                class="badge-system badge-LOYALITAS"
+                style="white-space: nowrap"
+                >Hemat Rp 50.000</span
+              >
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="switchView('home')"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn btn-primary">
+                ✓ Konfirmasi & Buat Janji Temu
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         PAGE VIEW 4: PROFIL & REKAM MEDIS TERPADU
+         ==================================================================== -->
+      <section id="view-profile" class="page-view">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-title">
+              Profil & Garis Waktu Rekam Medis Terpadu
+            </h2>
+            <p style="font-size: 13.5px; color: var(--text-muted)">
+              Satu Pasien, Satu Riwayat terpadu dari 5 sistem sumber data
+              Mandaya.
+            </p>
+          </div>
+          <button
+            class="btn btn-primary btn-sm"
+            onclick="openAddProfileModal()"
+          >
+            + Tambah Profil Anggota
+          </button>
+        </div>
+
+        <!-- Profile Selector Pills -->
+        <div class="profile-pills-row" id="profile-pills-container">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Active Profile Details Card -->
+        <div class="quick-card" style="margin-bottom: 28px">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              flex-wrap: wrap;
+              gap: 16px;
+            "
+          >
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  font-weight: 700;
+                  letter-spacing: 0.5px;
+                  text-transform: uppercase;
+                "
+              >
+                MASTER PATIENT INDEX IDENTIFIER
+              </div>
+              <h3
+                style="
+                  font-size: 22px;
+                  font-weight: 800;
+                  color: var(--text-main);
+                  margin-top: 2px;
+                "
+                id="prof-disp-name"
+              >
+                Siti Aminah Rahayu
+              </h3>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-top: 6px;
+                "
+              >
+                <code
+                  style="
+                    background: var(--primary-light);
+                    color: var(--primary-dark);
+                    font-weight: 700;
+                    padding: 3px 8px;
+                    border-radius: 6px;
+                    font-size: 13px;
+                  "
+                  id="prof-disp-mpi"
+                >
+                  MPI-0001
+                </code>
+                <span class="badge-system badge-LOYALITAS" id="prof-disp-tier"
+                  >Care+ Gold Member</span
+                >
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px">
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="openEditProfileModal()"
+              >
+                ✏️ Edit Profil
+              </button>
+              <button
+                class="btn btn-accent btn-sm"
+                onclick="openConsentModal()"
+              >
+                🛡️ Kelola Privasi (Consent)
+              </button>
+            </div>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 16px;
+              margin-top: 20px;
+              padding-top: 16px;
+              border-top: 1px solid var(--border-color);
+              font-size: 13px;
+            "
+          >
+            <div>
+              <span style="color: var(--text-muted)">NIK Dukcapil:</span>
+              <div
+                style="font-weight: 700; color: var(--text-main)"
+                id="prof-disp-nik"
+              >
+                3201018504120001
+              </div>
+            </div>
+            <div>
+              <span style="color: var(--text-muted)">Nomor HP / WhatsApp:</span>
+              <div
+                style="font-weight: 700; color: var(--text-main)"
+                id="prof-disp-phone"
+              >
+                081234567890
+              </div>
+            </div>
+            <div>
+              <span style="color: var(--text-muted)">Email Pasien:</span>
+              <div
+                style="font-weight: 700; color: var(--text-main)"
+                id="prof-disp-email"
+              >
+                siti.aminah@gmail.com
+              </div>
+            </div>
+            <div>
+              <span style="color: var(--text-muted)">Tanggal Lahir:</span>
+              <div
+                style="font-weight: 700; color: var(--text-main)"
+                id="prof-disp-birth"
+              >
+                1985-04-12 (39 thn)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Garis Waktu Terpadu 5 Sistem -->
+        <div
+          style="
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 12px;
+              margin-bottom: 16px;
+            "
+          >
+            <div>
+              <h3
+                style="
+                  font-size: 18px;
+                  font-weight: 800;
+                  color: var(--text-main);
+                "
+              >
+                Garis Waktu Terpadu 5 Sistem Sumber
+              </h3>
+              <p style="font-size: 13px; color: var(--text-muted)">
+                Rekam jejak terpadu dari HIS, Care Dokter, Care+ App, CRM, dan
+                Survey Kepuasan.
+              </p>
+            </div>
+
+            <!-- System Filter Pills -->
+            <div
+              style="display: flex; gap: 6px; flex-wrap: wrap"
+              id="timeline-filters"
+            >
+              <button
+                class="btn btn-secondary btn-sm active"
+                onclick="filterTimeline('ALL', this)"
+              >
+                Semua Sistem
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterTimeline('HIS', this)"
+              >
+                HIS
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterTimeline('CARE_DOKTER', this)"
+              >
+                Care Dokter
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterTimeline('LOYALITAS', this)"
+              >
+                Care+ / Poin
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterTimeline('CRM', this)"
+              >
+                CRM
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterTimeline('FEEDBACK', this)"
+              >
+                Umpan Balik
+              </button>
+            </div>
+          </div>
+
+          <div class="timeline-feed" id="patient-timeline-container">
+            <!-- Timeline events rendered via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         PAGE VIEW 5: MANDAYA CAREPOINT (MODUL 1: LOYALITAS MEDIS & GAMIFIKASI)
+         ==================================================================== -->
+      <section id="view-loyalty" class="page-view">
+        <!-- Loyalty Hero Card -->
+        <div class="loyalty-hero-card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              flex-wrap: wrap;
+              gap: 20px;
+              position: relative;
+              z-index: 2;
+            "
+          >
+            <div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  margin-bottom: 8px;
+                "
+              >
+                <span class="tier-badge-pill tier-gold" id="loyalty-hero-tier"
+                  >⭐ Gold Care</span
+                >
+                <span
+                  style="font-size: 12px; color: #94a3b8"
+                  id="loyalty-hero-patient"
+                  >Siti Aminah Rahayu (MPI-0001)</span
+                >
+              </div>
+              <div
+                style="
+                  font-size: 13px;
+                  color: #94a3b8;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  font-weight: 600;
+                "
+              >
+                SALDO MANDAYA CAREPOINT
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: baseline;
+                  gap: 12px;
+                  margin-top: 4px;
+                "
+              >
+                <h1
+                  style="
+                    font-size: 42px;
+                    font-weight: 800;
+                    color: #ffffff;
+                    line-height: 1;
+                  "
+                  id="loyalty-points-val"
+                >
+                  2.450
+                </h1>
+                <span style="font-size: 18px; font-weight: 600; color: #38bdf8"
+                  >Poin Sehat</span
+                >
+              </div>
+              <p
+                style="
+                  font-size: 13px;
+                  color: #cbd5e1;
+                  margin-top: 8px;
+                  max-width: 500px;
+                "
+              >
+                Tukarkan poin untuk preskripsi klinis DPJP, konsultasi lanjutan,
+                screening, atau bagikan ke kolam kesehatan keluarga.
+              </p>
+            </div>
+
+            <!-- Streak & Auto-Use Box -->
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                min-width: 280px;
+              "
+            >
+              <!-- Care Streak Widget -->
+              <div
+                style="
+                  background: rgba(255, 255, 255, 0.08);
+                  border: 1px solid rgba(255, 255, 255, 0.15);
+                  border-radius: 14px;
+                  padding: 12px 16px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-size: 24px">🔥</span>
+                  <div>
+                    <div
+                      style="font-weight: 700; font-size: 14px; color: #fbbf24"
+                      id="loyalty-streak-count"
+                    >
+                      5 Hari Care Streak
+                    </div>
+                    <div style="font-size: 11px; color: #94a3b8">
+                      Kepatuhan minum obat & check-in
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="btn btn-sm btn-white"
+                  style="font-size: 11px; padding: 4px 8px"
+                  onclick="claimDailyStreak()"
+                >
+                  +20 Pts
+                </button>
+              </div>
+
+              <!-- Auto-Use My Points Toggle -->
+              <div class="auto-use-toggle-box">
+                <div>
+                  <div
+                    style="
+                      font-weight: 700;
+                      font-size: 13px;
+                      color: #ffffff;
+                      display: flex;
+                      align-items: center;
+                      gap: 6px;
+                    "
+                  >
+                    ⚡ Auto-Use My Points
+                  </div>
+                  <div style="font-size: 11px; color: #94a3b8">
+                    Otomatis potong poin saat reservasi RS
+                  </div>
+                </div>
+                <label class="switch-toggle">
+                  <input
+                    type="checkbox"
+                    id="toggle-auto-use"
+                    checked
+                    onchange="toggleAutoUseSetting(this.checked)"
+                  />
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tier Progress Bar -->
+          <div
+            style="
+              margin-top: 24px;
+              padding-top: 18px;
+              border-top: 1px solid rgba(255, 255, 255, 0.15);
+              position: relative;
+              z-index: 2;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                margin-bottom: 6px;
+              "
+            >
+              <span style="color: #cbd5e1"
+                >Progress Menuju
+                <strong style="color: #38bdf8" id="loyalty-next-tier-name"
+                  >Platinum Royale</strong
+                ></span
+              >
+              <span
+                style="color: #ffffff; font-weight: 700"
+                id="loyalty-next-tier-text"
+                >550 Pts lagi</span
+              >
+            </div>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.15);
+                height: 8px;
+                border-radius: 4px;
+                overflow: hidden;
+              "
+            >
+              <div
+                id="loyalty-tier-progress-bar"
+                style="
+                  background: linear-gradient(90deg, #f59e0b, #38bdf8);
+                  height: 100%;
+                  width: 72%;
+                  border-radius: 4px;
+                  transition: width 0.4s ease;
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: POINT PRESCRIPTION ENGINE -->
+        <div style="margin-bottom: 32px">
+          <div class="section-header-row">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <h2 class="section-title">🩺 Point Prescription Engine</h2>
+                <span class="badge-system badge-HIS" style="font-size: 11px"
+                  >Rekomendasi DPJP Terpersonalisasi</span
+                >
+              </div>
+              <p style="font-size: 13.5px; color: var(--text-muted)">
+                Sistem menganalisis riwayat HIS, fase perawatan, dan diagnosis
+                untuk merekomendasikan penggunaan poin klinis yang tepat
+                sasaran.
+              </p>
+            </div>
+            <div
+              style="
+                font-size: 12px;
+                color: var(--primary);
+                font-weight: 700;
+                background: var(--primary-light);
+                padding: 4px 10px;
+                border-radius: 8px;
+              "
+            >
+              Fase: Pasca Tindakan (Hari ke-14)
+            </div>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+              gap: 16px;
+            "
+            id="point-prescriptions-grid"
+          >
             <!-- Rendered via JS -->
           </div>
         </div>
 
-        <!-- Area Chat Room -->
-        <div class="chat-area">
-          <div class="chat-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <img id="active-chat-avatar" src="/anisa.svg" alt="Doctor" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-light);">
+        <!-- SECTION 2 & 3: CARE REWARDS & LIFESTYLE REWARDS (MICRO-BURN) -->
+        <div style="margin-bottom: 32px">
+          <div class="section-header-row">
+            <div>
+              <h2 class="section-title">🎁 Katalog Rewards Mandaya</h2>
+              <p style="font-size: 13.5px; color: var(--text-muted)">
+                Pilih manfaat klinis pascaperawatan atau micro-burn kebutuhan
+                harian rumah sakit.
+              </p>
+            </div>
+
+            <!-- Reward Category Filter Tabs -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap">
+              <button
+                class="btn btn-secondary btn-sm active"
+                id="btn-filter-all-rewards"
+                onclick="filterRewardsCatalog('ALL', this)"
+              >
+                Semua Rewards
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterRewardsCatalog('care_clinical', this)"
+              >
+                🩺 Care Rewards (Klinis)
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="filterRewardsCatalog('lifestyle_micro', this)"
+              >
+                ☕ Lifestyle & Micro-Burn
+              </button>
+            </div>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 16px;
+            "
+            id="rewards-catalog-grid"
+          >
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- SECTION 4: FAMILY REWARDS (FAMILY HEALTH POOL) -->
+        <div style="margin-bottom: 32px">
+          <div class="family-pool-box">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                gap: 16px;
+                margin-bottom: 20px;
+              "
+            >
               <div>
-                <div id="active-chat-name" style="font-weight: 700; font-size: 15px; color: var(--text-main);">dr. Anisa Putri, Sp.A</div>
-                <div id="active-chat-spec" style="font-size: 12px; color: var(--primary); font-weight: 600;">Spesialis Anak · Online</div>
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <span style="font-size: 24px">👨‍👩‍👧‍👦</span>
+                  <h3
+                    style="font-size: 20px; font-weight: 800; color: #14532d"
+                    id="family-pool-name"
+                  >
+                    Family Health Pool: Keluarga Rahayu Sudiro
+                  </h3>
+                </div>
+                <p style="font-size: 13px; color: #166534; margin-top: 4px">
+                  Gabungkan dan transfer poin yang tidak terpakai agar dapat
+                  digunakan oleh pasangan, anak, atau orang tua untuk kebutuhan
+                  medis.
+                </p>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 12px">
+                <div style="text-align: right">
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: #166534;
+                      text-transform: uppercase;
+                    "
+                  >
+                    Total Pool Bersama
+                  </div>
+                  <div
+                    style="font-size: 28px; font-weight: 800; color: #14532d"
+                    id="family-pool-total-pts"
+                  >
+                    3.800 Pts
+                  </div>
+                </div>
+                <button
+                  class="btn btn-primary btn-sm"
+                  onclick="openFamilyTransferModal()"
+                  style="background: #15803d; border-color: #15803d"
+                >
+                  + Transfer Poin ke Pool
+                </button>
               </div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="openBookingForCurrentDoctor()">
-              📅 Buat Janji Temu
-            </button>
-          </div>
 
-          <div class="chat-messages" id="chat-messages-container">
-            <!-- Messages rendered via JS -->
+            <!-- Members Grid -->
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 12px;
+              "
+              id="family-pool-members-grid"
+            >
+              <!-- Rendered via JS -->
+            </div>
           </div>
-
-          <form class="chat-input-bar" onsubmit="sendChatMessage(event)">
-            <input type="text" id="chat-input-field" class="chat-input" placeholder="Ketik pertanyaan atau keluhan Anda di sini..." autocomplete="off">
-            <button type="submit" class="btn btn-primary">
-              Kirim
-            </button>
-          </form>
         </div>
-      </div>
-    </section>
+
+        <!-- SECTION 5: CARE JOURNEY & GAMIFIKASI -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+          "
+        >
+          <!-- Left: Daily Missions List -->
+          <div
+            style="
+              background: #ffffff;
+              border: 1px solid var(--border-color);
+              border-radius: 18px;
+              padding: 24px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+              "
+            >
+              <div>
+                <h3
+                  style="
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                  "
+                >
+                  🎯 Misi Harian & Care Journey
+                </h3>
+                <p style="font-size: 12.5px; color: var(--text-muted)">
+                  Selesaikan aktivitas sehat untuk meraih poin ekstra.
+                </p>
+              </div>
+              <span class="badge-system badge-LOYALITAS">+275 Pts Total</span>
+            </div>
+
+            <div id="gamification-missions-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Right: Interactive Health Quiz Card -->
+          <div
+            style="
+              background: #ffffff;
+              border: 1px solid var(--border-color);
+              border-radius: 18px;
+              padding: 24px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            "
+          >
+            <div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 12px;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 6px">
+                  <span style="font-size: 20px">🧠</span>
+                  <h3
+                    style="
+                      font-size: 16px;
+                      font-weight: 800;
+                      color: var(--text-main);
+                    "
+                  >
+                    Kuis Kesehatan Harian
+                  </h3>
+                </div>
+                <span class="badge-system badge-CARE_DOKTER">+50 Poin</span>
+              </div>
+              <p
+                style="
+                  font-size: 13.5px;
+                  color: var(--text-main);
+                  font-weight: 600;
+                  margin-bottom: 14px;
+                "
+                id="quiz-question-text"
+              >
+                Berapa batas maksimal asupan garam (natrium) harian yang
+                dianjurkan untuk pasien hipertensi & pasca stent?
+              </p>
+
+              <div
+                id="quiz-options-list"
+                style="display: flex; flex-direction: column; gap: 8px"
+              >
+                <!-- Rendered via JS -->
+              </div>
+
+              <!-- Quiz Result Feedback Box -->
+              <div
+                id="quiz-feedback-box"
+                style="
+                  display: none;
+                  margin-top: 14px;
+                  padding: 12px;
+                  border-radius: 10px;
+                  font-size: 12.5px;
+                "
+              ></div>
+            </div>
+
+            <button
+              class="btn btn-primary btn-sm"
+              id="btn-submit-quiz"
+              onclick="submitActiveQuiz()"
+              style="margin-top: 16px; width: 100%"
+            >
+              ✓ Kirim Jawaban (+50 Pts)
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 6: RIWAYAT TRANSAKSI POIN -->
+        <div
+          style="
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px;
+          "
+        >
+          <h3
+            style="
+              font-size: 16px;
+              font-weight: 800;
+              color: var(--text-main);
+              margin-bottom: 16px;
+            "
+          >
+            📋 Buku Catatan Transaksi Mandaya CarePoint
+          </h3>
+          <div style="overflow-x: auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Aktivitas</th>
+                  <th>Kategori</th>
+                  <th>Detail & Keterangan</th>
+                  <th>Jumlah Poin</th>
+                </tr>
+              </thead>
+              <tbody id="loyalty-transactions-table-body">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <!-- ====================================================================
-         PAGE VIEW 3: RESERVASI BARU
-         ==================================================================== -->
-    <section id="view-booking" class="page-view">
-      <div class="form-card">
-        <div style="margin-bottom: 24px; text-align: center;">
-          <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main);">Formulir Reservasi Janji Temu</h2>
-          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">
-            Jadwalkan kunjungan poliklinik atau konsultasi rawat jalan.
-          </p>
+       HIDDEN 3-DOTS MANAGEMENT DRAWER (PANEL DEMO JURI & KONSOL STAF)
+       ==================================================================== -->
+    <div
+      class="drawer-backdrop"
+      id="drawer-backdrop"
+      onclick="closeDrawerOnOutside(event)"
+    >
+      <div class="drawer-panel" onclick="event.stopPropagation()">
+        <div class="drawer-header">
+          <div>
+            <div
+              style="
+                font-size: 11px;
+                color: #38bdf8;
+                font-weight: 700;
+                text-transform: uppercase;
+              "
+            >
+              MANDAYA CLINICAL DATA PLATFORM
+            </div>
+            <h2 style="font-size: 18px; font-weight: 800">
+              Panel Manajemen & Observabilitas Medis
+            </h2>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px">
+            <div class="drawer-nav-tabs">
+              <button
+                class="drawer-tab-btn active"
+                id="drawer-tab-risk"
+                onclick="switchDrawerTab('risk')"
+              >
+                🩺 Pemantauan Risiko
+              </button>
+              <button
+                class="drawer-tab-btn"
+                id="drawer-tab-mpi"
+                onclick="switchDrawerTab('mpi')"
+              >
+                ⚙️ Observabilitas MPI
+              </button>
+              <button
+                class="drawer-tab-btn"
+                id="drawer-tab-privacy"
+                onclick="switchDrawerTab('privacy')"
+              >
+                🛡️ Audit UU PDP
+              </button>
+            </div>
+            <button
+              style="
+                background: rgba(255, 255, 255, 0.15);
+                border: none;
+                color: white;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+              "
+              onclick="toggleDrawer()"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
-        <form id="booking-form" onsubmit="submitBooking(event)">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Pilih Profil Pasien *</label>
-              <select id="book-profile-select" class="form-select" required>
-                <!-- Rendered via JS -->
-              </select>
+        <div class="drawer-body">
+          <!-- DRAWER TAB 1: PEMANTAUAN RISIKO KLINIS (STAF & DPJP) -->
+          <div id="drawer-pane-risk" style="display: block">
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+              "
+            >
+              <div>
+                <div
+                  style="
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                  "
+                >
+                  Antrean Prioritas Pasien Berisiko
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted)">
+                  Mesin inferensi aturan transparan (XAI) mendeteksi pasien
+                  pasca rawat yang membutuhkan intervensi segera.
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="advanceDaySimulation()"
+                >
+                  ⏩ Majukan Hari (+1 Hari)
+                </button>
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="loadRiskQueue()"
+                >
+                  🔄 Muat Ulang Antrean
+                </button>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Dokter Spesialis Tujuan *</label>
-              <select id="book-doctor-select" class="form-select" required>
-                <!-- Rendered via JS -->
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Rumah Sakit / Lokasi *</label>
-              <select id="book-hospital-select" class="form-select" required>
-                <option value="Mandaya Royal Hospital Puri">Mandaya Royal Hospital Puri (Pusat)</option>
-                <option value="Mandaya Hospital Karawang">Mandaya Hospital Karawang</option>
-                <option value="Klinik Care+ Puri">Klinik Care+ Puri Mitra</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Tanggal Janji *</label>
-              <input type="date" id="book-date" class="form-input" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Jam Kunjungan *</label>
-              <select id="book-time" class="form-select" required>
-                <option value="09:00 WIB">09:00 WIB (Pagi)</option>
-                <option value="11:00 WIB">11:00 WIB (Siang)</option>
-                <option value="14:00 WIB">14:00 WIB (Sore)</option>
-                <option value="17:00 WIB">17:00 WIB (Malam)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Suhu Tubuh Pasien (°C)</label>
-              <input type="number" step="0.1" min="30" max="45" id="book-temp" class="form-input" placeholder="Contoh: 36.5">
-            </div>
-
-            <div class="form-group full">
-              <label class="form-label">Keluhan Utama / Gejala yang Dirasakan *</label>
-              <textarea id="book-symptom" class="form-textarea" rows="3" placeholder="Jelaskan keluhan, lokasi rasa sakit, atau alasan pemeriksaan secara rinci (minimal 10 karakter)..." required></textarea>
-            </div>
-
-            <div class="form-group full">
-              <label class="form-label">Riwayat Penyakit / Alergi Obat</label>
-              <input type="text" id="book-history" class="form-input" placeholder="Contoh: Hipertensi, Alergi Penisilin, Asma, dsb.">
+            <div id="staff-risk-queue-container">
+              <!-- Rendered via JS -->
             </div>
           </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 12px;">
-            <button type="button" class="btn btn-secondary" onclick="switchView('home')">
+          <!-- DRAWER TAB 2: OBSERVABILITAS MPI & RESOLUSI DATA -->
+          <div id="drawer-pane-mpi" style="display: none">
+            <!-- Master Control Toolbar -->
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+              "
+            >
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="runMpiResolution()"
+              >
+                ⚡ Jalankan Resolusi MPI
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                onclick="advanceDaySimulation()"
+              >
+                ⏩ Majukan Hari (+1 Hari)
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="resetDemoDb()">
+                🔄 Reset Demo Database
+              </button>
+              <a
+                href="/fhir/Patient/MPI-0001"
+                target="_blank"
+                class="btn btn-secondary btn-sm"
+              >
+                📋 Bukti FHIR R4 JSON
+              </a>
+            </div>
+
+            <!-- Section 1: Antrean Tinjauan Manusia MPI -->
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+                margin-bottom: 24px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 12px;
+                "
+              >
+                <h3
+                  style="
+                    font-size: 15px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                  "
+                >
+                  ⚖️ Antrean Tinjauan Manusia (Skor 0.70 – 0.92)
+                </h3>
+                <span
+                  class="badge-system badge-LOYALITAS"
+                  id="review-count-badge"
+                  >0 Perlu Tinjauan</span
+                >
+              </div>
+              <div id="mpi-review-list">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Section 2: Pembanding 4 Peran Minimisasi Data -->
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+                margin-bottom: 24px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 12px;
+                "
+              >
+                <h3
+                  style="
+                    font-size: 15px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                  "
+                >
+                  🎭 Pembanding Minimisasi Data (1 Pasien, 4 Peran)
+                </h3>
+                <select
+                  id="role-test-patient"
+                  class="form-select"
+                  style="font-size: 12px; padding: 4px 8px; width: auto"
+                  onchange="renderRoleComparison()"
+                >
+                  <option value="MPI-0001">
+                    Siti Aminah Rahayu (MPI-0001)
+                  </option>
+                </select>
+              </div>
+              <p
+                style="
+                  font-size: 12.5px;
+                  color: var(--text-muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Bukti visual prinsip Minimisasi Data UU PDP: Setiap aktor hanya
+                menerima atribut yang relevan sesuai tujuan tugasnya.
+              </p>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                  gap: 12px;
+                "
+                id="role-columns-grid"
+              >
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Section 3: Tabel Pasien MPI Terpadu -->
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+              "
+            >
+              <h3
+                style="
+                  font-size: 15px;
+                  font-weight: 800;
+                  color: var(--text-main);
+                  margin-bottom: 12px;
+                "
+              >
+                📋 Daftar Pasien Master Patient Index (MPI)
+              </h3>
+              <div style="overflow-x: auto">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>MPI ID</th>
+                      <th>Nama Pasien</th>
+                      <th>NIK Dukcapil</th>
+                      <th>Tgl Lahir</th>
+                      <th>Tautan Sumber</th>
+                      <th>Sistem Terhubung</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mpi-patients-table-body">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- DRAWER TAB 3: AUDIT AKSES & PERLINDUNGAN DATA UU PDP -->
+          <div id="drawer-pane-privacy" style="display: none">
+            <div
+              style="
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 18px;
+                margin-bottom: 20px;
+              "
+            >
+              <h3
+                style="
+                  font-size: 16px;
+                  font-weight: 800;
+                  color: var(--text-main);
+                  margin-bottom: 8px;
+                "
+              >
+                🛡️ Jejak Audit Akses Data Pasien (Access Log)
+              </h3>
+              <p
+                style="
+                  font-size: 13px;
+                  color: var(--text-muted);
+                  margin-bottom: 16px;
+                "
+              >
+                Setiap pembukaan rekam medis dicatat secara otomatis
+                (Append-Only) dengan kepatuhan UU PDP No. 27/2022.
+              </p>
+              <div style="overflow-x: auto">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Waktu</th>
+                      <th>Aktor & Peran</th>
+                      <th>MPI ID</th>
+                      <th>Tujuan (Purpose)</th>
+                      <th>Status Akses</th>
+                      <th>Field yang Dibuka</th>
+                    </tr>
+                  </thead>
+                  <tbody id="access-log-table-body">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+       MODALS: CHECK-IN GEJALA, CONSENT, & TAMBAH PROFIL
+       ==================================================================== -->
+    <!-- 1. Check-in Gejala Modal -->
+    <div class="modal-overlay" id="modal-checkin">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3
+            style="font-weight: 800; font-size: 17px; color: var(--text-main)"
+          >
+            📝 Check-in Mandiri Gejala Pasien
+          </h3>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="closeModal('modal-checkin')"
+          >
+            ✕
+          </button>
+        </div>
+        <form onsubmit="submitCheckin(event)">
+          <div class="modal-body">
+            <div style="margin-bottom: 18px">
+              <label
+                class="form-label"
+                style="display: flex; justify-content: space-between"
+              >
+                <span>Skala Nyeri Saat Ini (0 – 10):</span>
+                <strong
+                  id="pain-scale-val"
+                  style="color: var(--primary); font-size: 16px"
+                  >2</strong
+                >
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="10"
+                value="2"
+                id="input-pain-scale"
+                style="width: 100%; margin-top: 8px"
+                oninput="
+                  document.getElementById('pain-scale-val').textContent =
+                    this.value
+                "
+              />
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  margin-top: 4px;
+                "
+              >
+                <span>0 (Tidak Nyeri)</span>
+                <span>5 (Sedang)</span>
+                <span>10 (Sangat Hebat)</span>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 18px">
+              <label class="form-label">Gejala Lain yang Dirasakan:</label>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 8px;
+                  margin-top: 6px;
+                  font-size: 13px;
+                "
+              >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Sesak Nafas"
+                  />
+                  Sesak Nafas</label
+                >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Nyeri Dada"
+                  />
+                  Nyeri Dada</label
+                >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Pusing / Kliyengan"
+                  />
+                  Pusing / Kliyengan</label
+                >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Mual / Muntah"
+                  />
+                  Mual / Muntah</label
+                >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Bengkak Kaki"
+                  />
+                  Bengkak di Kaki</label
+                >
+                <label
+                  ><input
+                    type="checkbox"
+                    name="symptom_tag"
+                    value="Lemas / Letih"
+                  />
+                  Tubuh Lemas</label
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"
+                >Catatan Tambahan untuk Dokter DPJP:</label
+              >
+              <textarea
+                id="checkin-notes"
+                class="form-textarea"
+                rows="3"
+                placeholder="Ceritakan kondisi atau keluhan Anda lebih spesifik..."
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('modal-checkin')"
+            >
               Batal
             </button>
             <button type="submit" class="btn btn-primary">
-              ✓ Konfirmasi & Buat Janji Temu
+              ✓ Kirim Check-in
             </button>
           </div>
         </form>
       </div>
-    </section>
+    </div>
 
-    <!-- ====================================================================
-         PAGE VIEW 4: PROFIL & REKAM MEDIS TERPADU
-         ==================================================================== -->
-    <section id="view-profile" class="page-view">
-      <div class="section-header-row">
-        <div>
-          <h2 class="section-title">Profil & Garis Waktu Rekam Medis Terpadu</h2>
-          <p style="font-size: 13.5px; color: var(--text-muted);">
-            Satu Pasien, Satu Riwayat terpadu dari 5 sistem sumber data Mandaya.
+    <!-- 2. Consent Center Modal -->
+    <div class="modal-overlay" id="modal-consent">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3
+            style="font-weight: 800; font-size: 17px; color: var(--text-main)"
+          >
+            🛡️ Pengaturan Persetujuan Data (UU PDP)
+          </h3>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="closeModal('modal-consent')"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <p
+            style="
+              font-size: 13px;
+              color: var(--text-muted);
+              margin-bottom: 16px;
+            "
+          >
+            Sesuai UU Perlindungan Data Pribadi No. 27/2022, Anda memiliki hak
+            penuh mengontrol tujuan pemrosesan data medis Anda.
           </p>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="openAddProfileModal()">
-          + Tambah Profil Anggota
-        </button>
-      </div>
-
-      <!-- Profile Selector Pills -->
-      <div class="profile-pills-row" id="profile-pills-container">
-        <!-- Rendered via JS -->
-      </div>
-
-      <!-- Active Profile Details Card -->
-      <div class="quick-card" style="margin-bottom: 28px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
-          <div>
-            <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">
-              MASTER PATIENT INDEX IDENTIFIER
-            </div>
-            <h3 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-top: 2px;" id="prof-disp-name">
-              Siti Aminah Rahayu
-            </h3>
-            <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
-              <code style="background: var(--primary-light); color: var(--primary-dark); font-weight: 700; padding: 3px 8px; border-radius: 6px; font-size: 13px;" id="prof-disp-mpi">
-                MPI-0001
-              </code>
-              <span class="badge-system badge-LOYALITAS" id="prof-disp-tier">Care+ Gold Member</span>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 10px;">
-            <button class="btn btn-secondary btn-sm" onclick="openEditProfileModal()">
-              ✏️ Edit Profil
-            </button>
-            <button class="btn btn-accent btn-sm" onclick="openConsentModal()">
-              🛡️ Kelola Privasi (Consent)
-            </button>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color); font-size: 13px;">
-          <div>
-            <span style="color: var(--text-muted);">NIK Dukcapil:</span>
-            <div style="font-weight: 700; color: var(--text-main);" id="prof-disp-nik">3201018504120001</div>
-          </div>
-          <div>
-            <span style="color: var(--text-muted);">Nomor HP / WhatsApp:</span>
-            <div style="font-weight: 700; color: var(--text-main);" id="prof-disp-phone">081234567890</div>
-          </div>
-          <div>
-            <span style="color: var(--text-muted);">Email Pasien:</span>
-            <div style="font-weight: 700; color: var(--text-main);" id="prof-disp-email">siti.aminah@gmail.com</div>
-          </div>
-          <div>
-            <span style="color: var(--text-muted);">Tanggal Lahir:</span>
-            <div style="font-weight: 700; color: var(--text-main);" id="prof-disp-birth">1985-04-12 (39 thn)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Garis Waktu Terpadu 5 Sistem -->
-      <div style="background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); padding: 28px; box-shadow: var(--shadow-sm);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-          <div>
-            <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);">
-              Garis Waktu Terpadu 5 Sistem Sumber
-            </h3>
-            <p style="font-size: 13px; color: var(--text-muted);">
-              Rekam jejak terpadu dari HIS, Care Dokter, Care+ App, CRM, dan Survey Kepuasan.
-            </p>
-          </div>
-
-          <!-- System Filter Pills -->
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="timeline-filters">
-            <button class="btn btn-secondary btn-sm active" onclick="filterTimeline('ALL', this)">Semua Sistem</button>
-            <button class="btn btn-secondary btn-sm" onclick="filterTimeline('HIS', this)">HIS</button>
-            <button class="btn btn-secondary btn-sm" onclick="filterTimeline('CARE_DOKTER', this)">Care Dokter</button>
-            <button class="btn btn-secondary btn-sm" onclick="filterTimeline('LOYALITAS', this)">Care+ / Poin</button>
-            <button class="btn btn-secondary btn-sm" onclick="filterTimeline('CRM', this)">CRM</button>
-            <button class="btn btn-secondary btn-sm" onclick="filterTimeline('FEEDBACK', this)">Umpan Balik</button>
-          </div>
-        </div>
-
-        <div class="timeline-feed" id="patient-timeline-container">
-          <!-- Timeline events rendered via JS -->
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ====================================================================
-       HIDDEN 3-DOTS MANAGEMENT DRAWER (PANEL DEMO JURI & KONSOL STAF)
-       ==================================================================== -->
-  <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawerOnOutside(event)">
-    <div class="drawer-panel" onclick="event.stopPropagation()">
-      <div class="drawer-header">
-        <div>
-          <div style="font-size: 11px; color: #38bdf8; font-weight: 700; text-transform: uppercase;">
-            MANDAYA CLINICAL DATA PLATFORM
-          </div>
-          <h2 style="font-size: 18px; font-weight: 800;">Panel Manajemen & Observabilitas Medis</h2>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="drawer-nav-tabs">
-            <button class="drawer-tab-btn active" id="drawer-tab-risk" onclick="switchDrawerTab('risk')">
-              🩺 Pemantauan Risiko
-            </button>
-            <button class="drawer-tab-btn" id="drawer-tab-mpi" onclick="switchDrawerTab('mpi')">
-              ⚙️ Observabilitas MPI
-            </button>
-            <button class="drawer-tab-btn" id="drawer-tab-privacy" onclick="switchDrawerTab('privacy')">
-              🛡️ Audit UU PDP
-            </button>
-          </div>
-          <button style="background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 16px;" onclick="toggleDrawer()">✕</button>
-        </div>
-      </div>
-
-      <div class="drawer-body">
-        <!-- DRAWER TAB 1: PEMANTAUAN RISIKO KLINIS (STAF & DPJP) -->
-        <div id="drawer-pane-risk" style="display: block;">
-          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <div style="font-size: 16px; font-weight: 800; color: var(--text-main);">
-                Antrean Prioritas Pasien Berisiko
-              </div>
-              <div style="font-size: 13px; color: var(--text-muted);">
-                Mesin inferensi aturan transparan (XAI) mendeteksi pasien pasca rawat yang membutuhkan intervensi segera.
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn btn-secondary btn-sm" onclick="advanceDaySimulation()">
-                ⏩ Majukan Hari (+1 Hari)
-              </button>
-              <button class="btn btn-secondary btn-sm" onclick="loadRiskQueue()">
-                🔄 Muat Ulang Antrean
-              </button>
-            </div>
-          </div>
-
-          <div id="staff-risk-queue-container">
+          <div id="consent-switches-container">
             <!-- Rendered via JS -->
           </div>
         </div>
-
-        <!-- DRAWER TAB 2: OBSERVABILITAS MPI & RESOLUSI DATA -->
-        <div id="drawer-pane-mpi" style="display: none;">
-          <!-- Master Control Toolbar -->
-          <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button class="btn btn-primary btn-sm" onclick="runMpiResolution()">
-              ⚡ Jalankan Resolusi MPI
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="advanceDaySimulation()">
-              ⏩ Majukan Hari (+1 Hari)
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="resetDemoDb()">
-              🔄 Reset Demo Database
-            </button>
-            <a href="/fhir/Patient/MPI-0001" target="_blank" class="btn btn-secondary btn-sm">
-              📋 Bukti FHIR R4 JSON
-            </a>
-          </div>
-
-          <!-- Section 1: Antrean Tinjauan Manusia MPI -->
-          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main);">
-                ⚖️ Antrean Tinjauan Manusia (Skor 0.70 – 0.92)
-              </h3>
-              <span class="badge-system badge-LOYALITAS" id="review-count-badge">0 Perlu Tinjauan</span>
-            </div>
-            <div id="mpi-review-list">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-
-          <!-- Section 2: Pembanding 4 Peran Minimisasi Data -->
-          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main);">
-                🎭 Pembanding Minimisasi Data (1 Pasien, 4 Peran)
-              </h3>
-              <select id="role-test-patient" class="form-select" style="font-size: 12px; padding: 4px 8px; width: auto;" onchange="renderRoleComparison()">
-                <option value="MPI-0001">Siti Aminah Rahayu (MPI-0001)</option>
-              </select>
-            </div>
-            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-              Bukti visual prinsip Minimisasi Data UU PDP: Setiap aktor hanya menerima atribut yang relevan sesuai tujuan tugasnya.
-            </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;" id="role-columns-grid">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-
-          <!-- Section 3: Tabel Pasien MPI Terpadu -->
-          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px;">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 12px;">
-              📋 Daftar Pasien Master Patient Index (MPI)
-            </h3>
-            <div style="overflow-x: auto;">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>MPI ID</th>
-                    <th>Nama Pasien</th>
-                    <th>NIK Dukcapil</th>
-                    <th>Tgl Lahir</th>
-                    <th>Tautan Sumber</th>
-                    <th>Sistem Terhubung</th>
-                  </tr>
-                </thead>
-                <tbody id="mpi-patients-table-body">
-                  <!-- Rendered via JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- DRAWER TAB 3: AUDIT AKSES & PERLINDUNGAN DATA UU PDP -->
-        <div id="drawer-pane-privacy" style="display: none;">
-          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 20px;">
-            <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">
-              🛡️ Jejak Audit Akses Data Pasien (Access Log)
-            </h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-              Setiap pembukaan rekam medis dicatat secara otomatis (Append-Only) dengan kepatuhan UU PDP No. 27/2022.
-            </p>
-            <div style="overflow-x: auto;">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Waktu</th>
-                    <th>Aktor & Peran</th>
-                    <th>MPI ID</th>
-                    <th>Tujuan (Purpose)</th>
-                    <th>Status Akses</th>
-                    <th>Field yang Dibuka</th>
-                  </tr>
-                </thead>
-                <tbody id="access-log-table-body">
-                  <!-- Rendered via JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====================================================================
-       MODALS: CHECK-IN GEJALA, CONSENT, & TAMBAH PROFIL
-       ==================================================================== -->
-  <!-- 1. Check-in Gejala Modal -->
-  <div class="modal-overlay" id="modal-checkin">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="font-weight: 800; font-size: 17px; color: var(--text-main);">📝 Check-in Mandiri Gejala Pasien</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-checkin')">✕</button>
-      </div>
-      <form onsubmit="submitCheckin(event)">
-        <div class="modal-body">
-          <div style="margin-bottom: 18px;">
-            <label class="form-label" style="display: flex; justify-content: space-between;">
-              <span>Skala Nyeri Saat Ini (0 – 10):</span>
-              <strong id="pain-scale-val" style="color: var(--primary); font-size: 16px;">2</strong>
-            </label>
-            <input type="range" min="0" max="10" value="2" id="input-pain-scale" style="width: 100%; margin-top: 8px;" oninput="document.getElementById('pain-scale-val').textContent = this.value">
-            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-              <span>0 (Tidak Nyeri)</span>
-              <span>5 (Sedang)</span>
-              <span>10 (Sangat Hebat)</span>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 18px;">
-            <label class="form-label">Gejala Lain yang Dirasakan:</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; font-size: 13px;">
-              <label><input type="checkbox" name="symptom_tag" value="Sesak Nafas"> Sesak Nafas</label>
-              <label><input type="checkbox" name="symptom_tag" value="Nyeri Dada"> Nyeri Dada</label>
-              <label><input type="checkbox" name="symptom_tag" value="Pusing / Kliyengan"> Pusing / Kliyengan</label>
-              <label><input type="checkbox" name="symptom_tag" value="Mual / Muntah"> Mual / Muntah</label>
-              <label><input type="checkbox" name="symptom_tag" value="Bengkak Kaki"> Bengkak di Kaki</label>
-              <label><input type="checkbox" name="symptom_tag" value="Lemas / Letih"> Tubuh Lemas</label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Catatan Tambahan untuk Dokter DPJP:</label>
-            <textarea id="checkin-notes" class="form-textarea" rows="3" placeholder="Ceritakan kondisi atau keluhan Anda lebih spesifik..."></textarea>
-          </div>
-        </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-checkin')">Batal</button>
-          <button type="submit" class="btn btn-primary">✓ Kirim Check-in</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- 2. Consent Center Modal -->
-  <div class="modal-overlay" id="modal-consent">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="font-weight: 800; font-size: 17px; color: var(--text-main);">🛡️ Pengaturan Persetujuan Data (UU PDP)</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-consent')">✕</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-          Sesuai UU Perlindungan Data Pribadi No. 27/2022, Anda memiliki hak penuh mengontrol tujuan pemrosesan data medis Anda.
-        </p>
-        <div id="consent-switches-container">
-          <!-- Rendered via JS -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="closeModal('modal-consent')"
+          >
+            Tutup & Simpan
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="closeModal('modal-consent')">Tutup & Simpan</button>
+    </div>
+
+    <!-- 3. Tambah Profil Anggota Baru Modal -->
+    <div class="modal-overlay" id="modal-profile">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3
+            style="font-weight: 800; font-size: 17px; color: var(--text-main)"
+            id="modal-profile-title"
+          >
+            Tambah Profil Anggota Baru
+          </h3>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="closeModal('modal-profile')"
+          >
+            ✕
+          </button>
+        </div>
+        <form onsubmit="saveProfile(event)">
+          <input type="hidden" id="prof-form-id" />
+          <div class="modal-body">
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">Nama Lengkap Pasien *</label>
+                <input
+                  type="text"
+                  id="prof-form-name"
+                  class="form-input"
+                  required
+                  minlength="3"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tanggal Lahir *</label>
+                <input
+                  type="date"
+                  id="prof-form-birth"
+                  class="form-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Jenis Kelamin *</label>
+                <select id="prof-form-gender" class="form-select" required>
+                  <option value="Perempuan">Perempuan</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nomor WhatsApp / HP *</label>
+                <input
+                  type="text"
+                  id="prof-form-phone"
+                  class="form-input"
+                  required
+                  placeholder="081234567890"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Pasien *</label>
+                <input
+                  type="email"
+                  id="prof-form-email"
+                  class="form-input"
+                  required
+                  placeholder="nama@email.com"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">NIK Dukcapil (16 Digit) *</label>
+                <input
+                  type="text"
+                  id="prof-form-nik"
+                  class="form-input"
+                  required
+                  maxlength="16"
+                  minlength="16"
+                  placeholder="320101..."
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label"
+                  >Nomor Kartu Keluarga (16 Digit) *</label
+                >
+                <input
+                  type="text"
+                  id="prof-form-kk"
+                  class="form-input"
+                  required
+                  maxlength="16"
+                  minlength="16"
+                  placeholder="320101..."
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('modal-profile')"
+            >
+              Batal
+            </button>
+            <button type="submit" class="btn btn-primary">Simpan Profil</button>
+          </div>
+        </form>
       </div>
     </div>
-  </div>
 
-  <!-- 3. Tambah Profil Anggota Baru Modal -->
-  <div class="modal-overlay" id="modal-profile">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="font-weight: 800; font-size: 17px; color: var(--text-main);" id="modal-profile-title">Tambah Profil Anggota Baru</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-profile')">✕</button>
-      </div>
-      <form onsubmit="saveProfile(event)">
-        <input type="hidden" id="prof-form-id">
+    <!-- 4. Post-Redemption Next-Best-Action Modal (Modul 1) -->
+    <div class="modal-overlay" id="modal-next-best-action">
+      <div class="modal-card" style="max-width: 580px">
+        <div
+          class="modal-header"
+          style="
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-bottom: 1px solid #bbf7d0;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span style="font-size: 26px">🎉</span>
+            <div>
+              <h3 style="font-weight: 800; font-size: 17px; color: #14532d">
+                Penukaran CarePoint Berhasil!
+              </h3>
+              <p style="font-size: 12px; color: #166534" id="nba-voucher-code">
+                Voucher: MNY-2026-XXXX
+              </p>
+            </div>
+          </div>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="closeModal('modal-next-best-action')"
+          >
+            ✕
+          </button>
+        </div>
         <div class="modal-body">
-          <div class="form-grid">
-            <div class="form-group full">
-              <label class="form-label">Nama Lengkap Pasien *</label>
-              <input type="text" id="prof-form-name" class="form-input" required minlength="3">
+          <div
+            style="
+              text-align: center;
+              margin-bottom: 20px;
+              padding: 14px;
+              background: #f8fafc;
+              border-radius: 12px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <div style="font-size: 13px; color: var(--text-muted)">
+              Reward yang Ditukar:
             </div>
-            <div class="form-group">
-              <label class="form-label">Tanggal Lahir *</label>
-              <input type="date" id="prof-form-birth" class="form-input" required>
+            <div
+              style="
+                font-size: 17px;
+                font-weight: 800;
+                color: var(--text-main);
+                margin: 4px 0;
+              "
+              id="nba-reward-title"
+            >
+              Nama Manfaat
             </div>
-            <div class="form-group">
-              <label class="form-label">Jenis Kelamin *</label>
-              <select id="prof-form-gender" class="form-select" required>
-                <option value="Perempuan">Perempuan</option>
-                <option value="Laki-laki">Laki-laki</option>
-              </select>
+            <div
+              style="font-size: 13px; color: #0284c7; font-weight: 700"
+              id="nba-points-deducted"
+            >
+              -500 Poin Terpotong
             </div>
-            <div class="form-group">
-              <label class="form-label">Nomor WhatsApp / HP *</label>
-              <input type="text" id="prof-form-phone" class="form-input" required placeholder="081234567890">
+          </div>
+
+          <div style="margin-bottom: 12px">
+            <div
+              style="
+                font-size: 13px;
+                font-weight: 700;
+                color: var(--text-main);
+                margin-bottom: 8px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+              "
+            >
+              <span>💡</span> Langkah Lanjutan Rekomendasi Medis
+              (Next-Best-Action):
             </div>
-            <div class="form-group">
-              <label class="form-label">Email Pasien *</label>
-              <input type="email" id="prof-form-email" class="form-input" required placeholder="nama@email.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">NIK Dukcapil (16 Digit) *</label>
-              <input type="text" id="prof-form-nik" class="form-input" required maxlength="16" minlength="16" placeholder="320101...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nomor Kartu Keluarga (16 Digit) *</label>
-              <input type="text" id="prof-form-kk" class="form-input" required maxlength="16" minlength="16" placeholder="320101...">
+            <div id="nba-recommendations-list">
+              <!-- Rendered via JS -->
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-profile')">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan Profil</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="closeModal('modal-next-best-action')"
+          >
+            Tutup
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="handleNbaPrimaryAction()"
+          >
+            Lakukan Tindakan Sekarang
+          </button>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
 
-  <script src="/app.js"></script>
-</body>
+    <!-- 5. Family Pool Transfer Modal (Modul 1) -->
+    <div class="modal-overlay" id="modal-family-transfer">
+      <div class="modal-card" style="max-width: 480px">
+        <div class="modal-header">
+          <h3
+            style="font-weight: 800; font-size: 17px; color: var(--text-main)"
+          >
+            👨‍👩‍👧‍👦 Transfer ke Family Health Pool
+          </h3>
+          <button
+            class="btn btn-secondary btn-sm"
+            onclick="closeModal('modal-family-transfer')"
+          >
+            ✕
+          </button>
+        </div>
+        <form onsubmit="submitFamilyPoolTransfer(event)">
+          <div class="modal-body">
+            <p
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                margin-bottom: 16px;
+              "
+            >
+              Poin yang ditransfer ke kolam bersama dapat langsung digunakan
+              oleh anggota keluarga untuk konsultasi, lab, atau rawat jalan.
+            </p>
+
+            <div class="form-group" style="margin-bottom: 16px">
+              <label class="form-label"
+                >Jumlah Poin yang Ingin Ditransfer</label
+              >
+              <div style="display: flex; gap: 8px; align-items: center">
+                <input
+                  type="number"
+                  id="transfer-points-amount"
+                  class="form-input"
+                  min="50"
+                  max="5000"
+                  step="50"
+                  value="300"
+                  required
+                />
+                <span
+                  style="
+                    font-weight: 700;
+                    font-size: 13px;
+                    color: var(--text-muted);
+                  "
+                  >Poin</span
+                >
+              </div>
+              <div
+                style="
+                  font-size: 11.5px;
+                  color: var(--text-muted);
+                  margin-top: 6px;
+                "
+                id="transfer-pool-available-hint"
+              >
+                Saldo Anda saat ini: 2.450 Poin
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 16px">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                onclick="
+                  document.getElementById('transfer-points-amount').value =
+                    '200'
+                "
+              >
+                200 Pts
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                onclick="
+                  document.getElementById('transfer-points-amount').value =
+                    '500'
+                "
+              >
+                500 Pts
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                onclick="
+                  document.getElementById('transfer-points-amount').value =
+                    '1000'
+                "
+              >
+                1.000 Pts
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('modal-family-transfer')"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style="background: #15803d; border-color: #15803d"
+            >
+              ✓ Transfer Poin Sekarang
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
 </html>
