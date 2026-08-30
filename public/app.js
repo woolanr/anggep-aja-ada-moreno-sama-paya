@@ -1991,21 +1991,31 @@ function renderMiraStepper(data) {
 function renderMiraChat(data) {
   const container = document.getElementById("mira-chat-messages");
   const subtitleEl = document.getElementById("mira-chat-subtitle");
+  const expressionBadge = document.getElementById("mira-live-expression-badge");
   if (!container || !data.currentPhase) return;
 
   if (subtitleEl) {
-    subtitleEl.textContent = `Bekerja di bawah protokol medis ${data.patientPathway.dpjp_name || "DPJP Konsultan"}`;
+    subtitleEl.textContent = `Bekerja di bawah supervisi ${data.patientPathway.dpjp_name || "DPJP Konsultan"}`;
   }
 
   const phase = data.currentPhase;
   const meds = data.pathway.common_medications || [];
 
+  const avatarImgHtml = `
+    <div class="mira-avatar-circle" style="width: 36px; height: 36px;">
+      <img src="/assets/mira/mira_avatar.jpg" alt="MIRA" onerror="this.src='/assets/mira/mira_full.jpg'">
+    </div>
+  `;
+
   let html = `
     <!-- Bubble 1: Sapaan Hangat & Pengingat Obat (Value First) -->
     <div class="mira-msg-row">
-      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      ${avatarImgHtml}
       <div class="mira-bubble">
-        <div style="font-size: 11px; color: #0284c7; font-weight: 700; margin-bottom: 4px;">MIRA CLINICAL ASSISTANT · H+${phase.day}</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <span style="font-size: 11px; color: #0284c7; font-weight: 700;">MIRA · H+${phase.day} (${phase.phase.toUpperCase()})</span>
+          <span style="font-size: 10.5px; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 8px; font-weight: 700;">👋 Hello!</span>
+        </div>
         <p style="margin: 0 0 8px 0;">
           ${phase.proactive_greeting}
         </p>
@@ -2026,9 +2036,12 @@ function renderMiraChat(data) {
 
     <!-- Bubble 2: Edukasi & Semangat Pemulihan (Value First) -->
     <div class="mira-msg-row">
-      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      ${avatarImgHtml}
       <div class="mira-bubble">
-        <div style="font-size: 11px; color: #059669; font-weight: 700; margin-bottom: 4px;">💡 TIPS KLINIS DPJP</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <span style="font-size: 11px; color: #059669; font-weight: 700;">💡 TIPS KLINIS DPJP</span>
+          <span style="font-size: 10.5px; background: #dcfce7; color: #15803d; padding: 2px 6px; border-radius: 8px; font-weight: 700;">📖 Guidance</span>
+        </div>
         <p style="margin: 0;">
           ${phase.value_first_tip}
         </p>
@@ -2037,9 +2050,12 @@ function renderMiraChat(data) {
 
     <!-- Bubble 3: Pertanyaan Check-in Terfokus -->
     <div class="mira-msg-row">
-      <div class="mira-avatar-circle" style="width: 34px; height: 34px; font-size: 16px;">🤖</div>
+      ${avatarImgHtml}
       <div class="mira-bubble" style="border: 2px solid #bae6fd; background: #f0f9ff;">
-        <div style="font-size: 11px; color: #0284c7; font-weight: 700; margin-bottom: 4px;">❓ PERTANYAAN CHECK-IN FASE ${phase.phase.toUpperCase()}</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <span style="font-size: 11px; color: #0284c7; font-weight: 700;">❓ PERTANYAAN CHECK-IN FASE ${phase.phase.toUpperCase()}</span>
+          <span style="font-size: 10.5px; background: #bae6fd; color: #0369a1; padding: 2px 6px; border-radius: 8px; font-weight: 700;">📱 Check-in</span>
+        </div>
         <p style="margin: 0; font-size: 15px; font-weight: 700; color: #0369a1;">
           "${phase.question}"
         </p>
@@ -2066,6 +2082,9 @@ function renderMiraChat(data) {
           </div>
         </div>
       `;
+      if (expressionBadge) {
+        expressionBadge.textContent = "👏 Great job!";
+      }
     }
   }
 
@@ -2131,6 +2150,17 @@ function selectOneTapOption(optionKey) {
         : "card-opt-bantuan";
   const el = document.getElementById(cardId);
   if (el) el.classList.add("selected");
+
+  const expressionBadge = document.getElementById("mira-live-expression-badge");
+  if (expressionBadge) {
+    if (optionKey === "membaik") {
+      expressionBadge.textContent = "👏 Great job!";
+    } else if (optionKey === "masih_gejala") {
+      expressionBadge.textContent = "🔍 Let me check that for you.";
+    } else {
+      expressionBadge.textContent = "❤️ I'm here for you.";
+    }
+  }
 }
 
 /**

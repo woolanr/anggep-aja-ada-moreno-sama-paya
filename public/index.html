@@ -220,10 +220,33 @@
           </div>
 
           <!-- Card 2: Asisten Pemulihan MIRA (Recovery Assistant) -->
-          <div class="quick-card">
+          <div
+            class="quick-card"
+            style="
+              border: 2px solid #bae6fd;
+              background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+            "
+          >
             <div>
               <div class="quick-card-header">
-                <div class="quick-card-title">🤖 Asisten Pemulihan MIRA</div>
+                <div
+                  class="quick-card-title"
+                  style="display: flex; align-items: center; gap: 8px"
+                >
+                  <img
+                    src="/assets/mira/mira_avatar.jpg"
+                    alt="MIRA"
+                    style="
+                      width: 28px;
+                      height: 28px;
+                      border-radius: 50%;
+                      object-fit: cover;
+                      border: 1.5px solid #0284c7;
+                    "
+                    onerror="this.style.display = 'none'"
+                  />
+                  <span>MIRA AI Companion</span>
+                </div>
                 <span
                   class="badge-system badge-HIS"
                   style="
@@ -238,18 +261,18 @@
                 style="
                   font-size: 13px;
                   color: var(--text-muted);
-                  margin-bottom: 14px;
+                  margin-bottom: 12px;
                 "
               >
-                Sapaan harian & check-in one-tap berbasis protokol klinis DPJP
-                dengan triase otomatis 3-level.
+                <em>"Your care, continued."</em> — Pendamping klinis AI proaktif
+                pasca rawat RS Mandaya.
               </p>
               <div
                 style="
-                  background: var(--bg-page);
-                  border: 1px solid var(--border-color);
+                  background: #ffffff;
+                  border: 1px solid #bae6fd;
                   border-radius: 12px;
-                  padding: 14px;
+                  padding: 12px;
                   margin-bottom: 12px;
                 "
               >
@@ -257,11 +280,11 @@
                   style="
                     display: flex;
                     justify-content: space-between;
-                    font-size: 13px;
-                    margin-bottom: 6px;
+                    font-size: 12.5px;
+                    margin-bottom: 4px;
                   "
                 >
-                  <span>Protokol Klinis:</span>
+                  <span style="color: var(--text-muted)">Care Pathway:</span>
                   <strong
                     style="color: var(--primary)"
                     id="home-mira-pathway-name"
@@ -280,16 +303,13 @@
               <button
                 class="btn btn-primary btn-sm"
                 onclick="switchView('mira')"
-                style="flex: 1"
+                style="
+                  flex: 1;
+                  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+                  border: none;
+                "
               >
-                🤖 Buka Asisten MIRA
-              </button>
-              <button
-                class="btn btn-secondary btn-sm"
-                onclick="openCheckinModal()"
-                title="Isi Check-in Cepat"
-              >
-                📝 Form
+                ✨ Sapa MIRA Sekarang
               </button>
             </div>
           </div>
@@ -942,87 +962,138 @@
          PAGE VIEW: MIRA (MODUL 2: RECOVERY ASSISTANT / FOLLOW-UP)
          ==================================================================== -->
       <section id="view-mira" class="page-view">
-        <!-- MIRA Hero Card -->
-        <div class="mira-hero-card">
+        <!-- MIRA Brand Hero Card (Mandaya Intelligent Recovery Assistant) -->
+        <div class="mira-brand-header">
           <div style="position: relative; z-index: 2">
             <div
               style="
                 display: flex;
                 justify-content: space-between;
-                align-items: flex-start;
+                align-items: center;
                 flex-wrap: wrap;
-                gap: 16px;
+                gap: 20px;
+                margin-bottom: 20px;
               "
             >
-              <div>
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 10px;
-                  "
-                >
-                  <span class="mira-badge-ai"
-                    >🤖 MANDAYA MIRA ENGINE · PROTOKOL DPJP</span
-                  >
-                  <span
-                    class="badge-system"
+              <!-- Character & Greeting -->
+              <div class="mira-character-showcase">
+                <img
+                  src="/assets/mira/mira_avatar.jpg"
+                  alt="MIRA - Mandaya Recovery Assistant"
+                  class="mira-avatar-hero-img"
+                  onerror="this.src = '/assets/mira/mira_full.jpg'"
+                />
+                <div>
+                  <div
                     style="
-                      background: rgba(255, 255, 255, 0.15);
-                      color: #ffffff;
-                      border-color: rgba(255, 255, 255, 0.3);
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      margin-bottom: 6px;
                     "
-                    id="mira-hero-status-pill"
-                    >Fase Pemulihan Aktif</span
                   >
+                    <span class="mira-badge-ai"
+                      >✨ MANDAYA HOSPITAL · PASSION FOR HEALING</span
+                    >
+                    <span
+                      class="badge-system"
+                      style="
+                        background: rgba(255, 255, 255, 0.2);
+                        color: #ffffff;
+                        border: 1px solid rgba(255, 255, 255, 0.4);
+                      "
+                      id="mira-hero-status-pill"
+                      >Active Recovery Journey</span
+                    >
+                  </div>
+                  <h1
+                    style="
+                      font-size: 28px;
+                      font-weight: 900;
+                      line-height: 1.1;
+                      margin: 0 0 4px 0;
+                      letter-spacing: -0.5px;
+                    "
+                  >
+                    MIRA
+                  </h1>
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      color: #7dd3fc;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Mandaya Intelligent Recovery Assistant
+                  </div>
+                  <div
+                    style="
+                      font-size: 13.5px;
+                      font-style: italic;
+                      color: #e0f2fe;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    "Your care, continued."
+                  </div>
+
+                  <!-- Floating Speech Bubble -->
+                  <div class="mira-speech-card">
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        font-size: 11px;
+                        font-weight: 800;
+                        color: #0284c7;
+                        margin-bottom: 3px;
+                      "
+                    >
+                      <span>💙</span> PESAN DARI MIRA
+                    </div>
+                    <p
+                      style="
+                        font-size: 12.5px;
+                        color: #0f172a;
+                        margin: 0;
+                        line-height: 1.45;
+                      "
+                    >
+                      <strong>Hi! I'm MIRA.</strong> I'm here to accompany you
+                      through your recovery journey after your care at Mandaya.
+                    </p>
+                  </div>
                 </div>
-                <h1
-                  style="
-                    font-size: 26px;
-                    font-weight: 800;
-                    line-height: 1.2;
-                    margin-bottom: 8px;
-                  "
-                >
-                  MIRA (Mandaya Intelligent Recovery Assistant)
-                </h1>
-                <p
-                  style="
-                    font-size: 14px;
-                    color: #bae6fd;
-                    max-width: 680px;
-                    line-height: 1.5;
-                  "
-                >
-                  Pendamping klinis proaktif pasca rawat. Menyapa terjadwal di
-                  tiap fase pemulihan, edukasi & pengingat obat, triase otomatis
-                  3 tingkat, dan jembatan loyalitas CarePoint.
-                </p>
               </div>
 
               <!-- Fast Pathway & Day Switcher Simulator (Demo Control) -->
               <div
                 style="
-                  background: rgba(15, 23, 42, 0.6);
-                  border: 1px solid rgba(255, 255, 255, 0.2);
-                  border-radius: 14px;
-                  padding: 14px 18px;
-                  min-width: 280px;
-                  backdrop-filter: blur(8px);
+                  background: rgba(15, 23, 42, 0.7);
+                  border: 1px solid rgba(255, 255, 255, 0.25);
+                  border-radius: 18px;
+                  padding: 16px 20px;
+                  min-width: 290px;
+                  backdrop-filter: blur(10px);
+                  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
                 "
               >
                 <div
                   style="
                     font-size: 11px;
-                    font-weight: 700;
+                    font-weight: 800;
                     color: #38bdf8;
                     text-transform: uppercase;
                     margin-bottom: 8px;
                     letter-spacing: 0.5px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
                   "
                 >
-                  ⚙️ Kontrol Simulasi Klinis DPJP
+                  <span>⚙️</span> SIMULASI KLINIS DPJP & FASE
                 </div>
                 <div style="margin-bottom: 10px">
                   <label
@@ -1120,7 +1191,6 @@
                 justify-content: space-between;
                 flex-wrap: wrap;
                 gap: 12px;
-                margin-top: 20px;
                 padding-top: 16px;
                 border-top: 1px solid rgba(255, 255, 255, 0.15);
                 font-size: 13px;
@@ -1130,13 +1200,19 @@
                 style="
                   display: flex;
                   align-items: center;
-                  gap: 16px;
+                  gap: 18px;
                   flex-wrap: wrap;
                 "
               >
                 <div>
-                  <span style="color: #94a3b8; font-size: 12px"
-                    >DPJP Penanggung Jawab:</span
+                  <span
+                    style="
+                      color: #94a3b8;
+                      font-size: 11px;
+                      text-transform: uppercase;
+                      font-weight: 700;
+                    "
+                    >DPJP Konsultan</span
                   >
                   <div
                     style="font-weight: 700; color: #ffffff"
@@ -1146,8 +1222,14 @@
                   </div>
                 </div>
                 <div>
-                  <span style="color: #94a3b8; font-size: 12px"
-                    >Diagnosis / Prosedur:</span
+                  <span
+                    style="
+                      color: #94a3b8;
+                      font-size: 11px;
+                      text-transform: uppercase;
+                      font-weight: 700;
+                    "
+                    >Diagnosis / Prosedur</span
                   >
                   <div
                     style="font-weight: 700; color: #38bdf8"
@@ -1157,8 +1239,14 @@
                   </div>
                 </div>
                 <div>
-                  <span style="color: #94a3b8; font-size: 12px"
-                    >Fase Saat Ini:</span
+                  <span
+                    style="
+                      color: #94a3b8;
+                      font-size: 11px;
+                      text-transform: uppercase;
+                      font-weight: 700;
+                    "
+                    >Fase Pemulihan</span
                   >
                   <div
                     style="font-weight: 700; color: #4ade80"
@@ -1169,9 +1257,9 @@
                 </div>
               </div>
 
-              <div style="display: flex; align-items: center; gap: 10px">
-                <span style="color: #94a3b8; font-size: 12px"
-                  >Reward Check-in Selesai:</span
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="color: #cbd5e1; font-size: 12px"
+                  >Reward Tiap Check-in:</span
                 >
                 <span
                   class="badge-system"
@@ -1184,6 +1272,161 @@
                   >🪙 +150 CarePoints</span
                 >
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- "WHO IS MIRA?" 4 PILLARS & EXPRESSIONS STRIP -->
+        <div class="mira-pillars-grid">
+          <div class="mira-pillar-card">
+            <div
+              class="mira-pillar-icon"
+              style="background: #e0f2fe; color: #0284c7"
+            >
+              💙
+            </div>
+            <div>
+              <strong
+                style="
+                  font-size: 13.5px;
+                  color: var(--text-main);
+                  display: block;
+                "
+                >Caring</strong
+              >
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  line-height: 1.4;
+                  display: block;
+                "
+                >Always here to check in and support you throughout
+                recovery.</span
+              >
+            </div>
+          </div>
+          <div class="mira-pillar-card">
+            <div
+              class="mira-pillar-icon"
+              style="background: #f3e8ff; color: #9333ea"
+            >
+              🧠
+            </div>
+            <div>
+              <strong
+                style="
+                  font-size: 13.5px;
+                  color: var(--text-main);
+                  display: block;
+                "
+                >Intelligent</strong
+              >
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  line-height: 1.4;
+                  display: block;
+                "
+                >Understands your care journey to give the right medical
+                guidance.</span
+              >
+            </div>
+          </div>
+          <div class="mira-pillar-card">
+            <div
+              class="mira-pillar-icon"
+              style="background: #fef3c7; color: #d97706"
+            >
+              🔔
+            </div>
+            <div>
+              <strong
+                style="
+                  font-size: 13.5px;
+                  color: var(--text-main);
+                  display: block;
+                "
+                >Proactive</strong
+              >
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  line-height: 1.4;
+                  display: block;
+                "
+                >Reminds you, guides you, and helps you stay on track.</span
+              >
+            </div>
+          </div>
+          <div class="mira-pillar-card">
+            <div
+              class="mira-pillar-icon"
+              style="background: #dcfce7; color: #16a34a"
+            >
+              👥
+            </div>
+            <div>
+              <strong
+                style="
+                  font-size: 13.5px;
+                  color: var(--text-main);
+                  display: block;
+                "
+                >Human-centered</strong
+              >
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  line-height: 1.4;
+                  display: block;
+                "
+                >Works seamlessly with Mandaya's care team for best
+                outcomes.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- "WITH YOU IN EVERY STEP" 4-STEP CAPABILITY STRIP -->
+        <div class="mira-steps-strip">
+          <div class="mira-step-item active">
+            <div class="step-num">Step 1</div>
+            <div class="step-title">📱 Check-in</div>
+            <div
+              style="font-size: 11px; color: var(--text-muted); margin-top: 2px"
+            >
+              Tanya kondisi terjadwal
+            </div>
+          </div>
+          <div class="mira-step-item">
+            <div class="step-num">Step 2</div>
+            <div class="step-title">📅 Reminder</div>
+            <div
+              style="font-size: 11px; color: var(--text-muted); margin-top: 2px"
+            >
+              Jadwal obat & kontrol
+            </div>
+          </div>
+          <div class="mira-step-item">
+            <div class="step-num">Step 3</div>
+            <div class="step-title">🧭 Guidance</div>
+            <div
+              style="font-size: 11px; color: var(--text-muted); margin-top: 2px"
+            >
+              Tips pemulihan DPJP
+            </div>
+          </div>
+          <div class="mira-step-item">
+            <div class="step-num">Step 4</div>
+            <div class="step-title">🩺 Connect Care Team</div>
+            <div
+              style="font-size: 11px; color: var(--text-muted); margin-top: 2px"
+            >
+              Eskalasi Tele-Nurse / IGD
             </div>
           </div>
         </div>
@@ -1225,7 +1468,7 @@
             <span
               style="font-size: 12px; font-weight: 700; color: var(--primary)"
               id="mira-progress-text"
-              >Progres Pemulihan: 40%</span
+              >Progres Pemulihan: 40% Selesai</span
             >
           </div>
 
@@ -1247,7 +1490,13 @@
           <div class="mira-chat-container">
             <div class="mira-chat-header">
               <div style="display: flex; align-items: center; gap: 12px">
-                <div class="mira-avatar-circle">🤖</div>
+                <div class="mira-avatar-circle">
+                  <img
+                    src="/assets/mira/mira_avatar.jpg"
+                    alt="MIRA Avatar"
+                    onerror="this.src = '/assets/mira/mira_full.jpg'"
+                  />
+                </div>
                 <div>
                   <div style="display: flex; align-items: center; gap: 6px">
                     <strong style="font-size: 15px; color: var(--text-main)"
@@ -1274,7 +1523,20 @@
                 </div>
               </div>
 
-              <div style="display: flex; gap: 6px">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span
+                  id="mira-live-expression-badge"
+                  style="
+                    font-size: 12px;
+                    background: #e0f2fe;
+                    color: #0369a1;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-weight: 700;
+                  "
+                >
+                  👋 Hello!
+                </span>
                 <button
                   class="btn btn-secondary btn-sm"
                   onclick="loadMiraPathway()"
