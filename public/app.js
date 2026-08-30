@@ -6,7 +6,6 @@
 // State Global Aplikasi
 let state = {
   currentView: "home",
-  currentTheme: "blue",
   drawerOpen: false,
   drawerTab: "risk",
   currentMpiId: "MPI-0001",
@@ -222,17 +221,6 @@ function switchView(viewName) {
   } else if (viewName === "booking") {
     updateBookingPointQuote();
   }
-}
-
-/**
- * Ganti Tema Warna
- */
-function setTheme(theme) {
-  state.currentTheme = theme;
-  document.body.className = theme === "blue" ? "" : `theme-${theme}`;
-  document.querySelectorAll(".theme-dot").forEach((dot) => {
-    dot.classList.toggle("active", dot.classList.contains(theme));
-  });
 }
 
 /**
